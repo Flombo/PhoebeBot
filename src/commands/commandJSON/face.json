@@ -1,0 +1,26 @@
+{
+  "name": "face",
+  "description": "Retrieves face references",
+  "options": [
+    {
+      "name": "gender",
+      "description": "The gender of the reference person",
+      "type": 3,
+      "required": true,
+      "choices" : [
+        {
+          "name": "female",
+          "value": "female"
+        },
+        {
+          "name": "male",
+          "value": "male"
+        },
+        {
+          "name": "all",
+          "value": "all"
+        }
+      ]
+    }
+  ]
+}
