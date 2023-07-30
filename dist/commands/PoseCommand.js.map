@@ -1,1 +1,0 @@
-{"version":3,"file":"PoseCommand.js","sourceRoot":"","sources":["../../src/commands/PoseCommand.ts"],"names":[],"mappings":";;;AACA,iDAA8C;AAG9C,MAAa,WAAY,SAAQ,2BAAY;IAEzC,YAAY,IAAa,EAAE,WAAoB,EAAE,OAAoC;QACjF,KAAK,CAAC,IAAI,EAAE,WAAW,EAAE,OAAO,CAAC,CAAC;IACtC,CAAC;CAIJ;AARD,kCAQC"}

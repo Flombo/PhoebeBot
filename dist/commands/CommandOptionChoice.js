@@ -5,11 +5,13 @@ class CommandOptionChoice {
     _name;
     _description;
     _required;
+    _type;
     _choices;
-    constructor(name, description, required, choices) {
+    constructor(name, description, required, type, choices) {
         this._name = name;
         this._description = description;
         this._required = required;
+        this._type = type;
         this._choices = choices;
     }
     get name() {
@@ -29,6 +31,12 @@ class CommandOptionChoice {
     }
     set required(value) {
         this._required = value;
+    }
+    get type() {
+        return this._type;
+    }
+    set type(value) {
+        this._type = value;
     }
     get choices() {
         return this._choices;

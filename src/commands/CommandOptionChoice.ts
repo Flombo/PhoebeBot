@@ -1,18 +1,19 @@
-import { APIApplicationCommandOptionChoice } from "discord.js";
+import { Choice } from "./Choice";
 
 export class CommandOptionChoice {
     
     private _name: string;
 
     private _description: string;
-
     private _required: boolean;
-    private _choices: Array<APIApplicationCommandOptionChoice<string>>;
+    private _type: number;
+    private _choices: Array<Choice>;
 
-    constructor(name : string, description : string, required : boolean, choices : Array<APIApplicationCommandOptionChoice<string>>) {
+    constructor(name : string, description : string, required : boolean, type : number, choices : Array<Choice>) {
         this._name = name;
         this._description = description;
         this._required = required;
+        this._type = type;
         this._choices = choices;
     }
 
@@ -40,11 +41,19 @@ export class CommandOptionChoice {
         this._required = value;
     }
 
-    public get choices(): Array<APIApplicationCommandOptionChoice<string>> {
+    public get type(): number {
+        return this._type;
+    }
+
+    public set type(value: number) {
+        this._type = value;
+    }
+
+    public get choices(): Array<Choice> {
         return this._choices;
     }
 
-    public set choices(value: Array<APIApplicationCommandOptionChoice<string>>) {
+    public set choices(value: Array<Choice>) {
         this._choices = value;
     }
 

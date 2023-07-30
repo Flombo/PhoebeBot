@@ -24,7 +24,7 @@
     },
     {
       "name": "clothing",
-      "description": "test",
+      "description": "The clothing of the reference person",
       "type": 3,
       "required": true,
       "choices": [

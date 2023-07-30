@@ -1,86 +1,87 @@
 import { Interaction, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { ICommand } from "./ICommand";
 import { CommandOptionChoice } from "./CommandOptionChoice";
-import { CommandType } from "./CommandType";
+import { PoseCommandType } from "./poseCommands/PoseCommandType";
 
 export abstract class SlashCommand implements ICommand {
 
-    private _slashCommandBuilder: SlashCommandBuilder;
+    private _data: SlashCommandBuilder;
 
     private _name: string;
 
-    private _type: CommandType;
+    private _type: PoseCommandType;
 
     private _description: string;
 
-    private _choices: Array<CommandOptionChoice>;
+    private _options: Array<CommandOptionChoice>;
     
-    constructor(name : string, description : string, choices : Array<CommandOptionChoice>) {
+    constructor(name : string, description : string, type : PoseCommandType, options : Array<CommandOptionChoice>) {
         this._name = name;
         this._description = description;
-        this._choices = choices;
-        this._slashCommandBuilder = new SlashCommandBuilder();
-        this.initSlashCommand(name, description, choices);
+        this._type = type;
+        this._options = options;
+        this._data = new SlashCommandBuilder();
     }
 
-    private initSlashCommand(name : string, description : string, choices : Array<CommandOptionChoice>) : void {
-        this._slashCommandBuilder.setName(name)
-        .setDescription(description);
+    /**
+     * Adds data to the SlashCommandBuilder like description, options and name.
+     */
+    public initSlashCommand() : void {
+        this._data.setName(this.name)
+        .setDescription(this.description);
        
-        choices.forEach(choice => {
+        this.options.forEach(option => {
 
             let stringOption = new SlashCommandStringOption();
-            stringOption.setRequired(choice.required);
-            stringOption.setName(choice.name);
-            stringOption.setDescription(choice.description);
-            choice.choices.forEach(choiceOption => stringOption.addChoices(choiceOption));
-
-            this._slashCommandBuilder.addStringOption(stringOption);
+            stringOption.setRequired(option.required);
+            stringOption.setName(option.name);
+            stringOption.setDescription(option.description);
+            option.choices.forEach(choiceOption => {
+                stringOption.addChoices(choiceOption)
+            });
+            
+            this._data.addStringOption(stringOption);
         });
     }
 
-    public async execute(interaction: Interaction): Promise<void> {
+    public async execute(interaction: any): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
-    protected get slashCommandBuilder(): SlashCommandBuilder {
-        return this._slashCommandBuilder;
+    public get data(): SlashCommandBuilder {
+        return this._data;
     }
 
-    protected set slashCommandBuilder(value: SlashCommandBuilder) {
-        this._slashCommandBuilder = value;
-    }
-
-    protected get name(): string {
+    public get name(): string {
         return this._name;
     }
 
-    protected set name(value: string) {
-        this._name = value;
+    public set name(name : string) {
+        this._name = name;
     }
 
-    public get type(): CommandType {
+    public get type(): PoseCommandType {
         return this._type;
     }
-    
-    public set type(value: CommandType) {
-        this._type = value;
+
+    public set type(type : PoseCommandType) {
+        this._type = type;
     }
 
-    protected get description(): string {
+    public get description(): string {
         return this._description;
     }
 
-    protected set description(value: string) {
-        this._description = value;
+    public set description(description : string) {
+        this._description = description;
     }
 
-    protected get choices(): Array<CommandOptionChoice> {
-        return this._choices;
+    public get options(): Array<CommandOptionChoice> {
+        return this._options;
     }
 
-    protected set choices(value: Array<CommandOptionChoice>) {
-        this._choices = value;
+    public set options(value : Array<CommandOptionChoice>) {
+        this._options = value;
     }
 
 }

@@ -3,62 +3,61 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SlashCommand = void 0;
 const discord_js_1 = require("discord.js");
 class SlashCommand {
-    _slashCommandBuilder;
+    _data;
     _name;
     _type;
     _description;
-    _choices;
-    constructor(name, description, choices) {
+    _options;
+    constructor(name, description, type, options) {
         this._name = name;
         this._description = description;
-        this._choices = choices;
-        this._slashCommandBuilder = new discord_js_1.SlashCommandBuilder();
-        this.initSlashCommand(name, description, choices);
+        this._type = type;
+        this._options = options;
+        this._data = new discord_js_1.SlashCommandBuilder();
     }
-    initSlashCommand(name, description, choices) {
-        this._slashCommandBuilder.setName(name)
-            .setDescription(description);
-        choices.forEach(choice => {
+    initSlashCommand() {
+        this._data.setName(this.name)
+            .setDescription(this.description);
+        this.options.forEach(option => {
             let stringOption = new discord_js_1.SlashCommandStringOption();
-            stringOption.setRequired(choice.required);
-            stringOption.setName(choice.name);
-            stringOption.setDescription(choice.description);
-            choice.choices.forEach(choiceOption => stringOption.addChoices(choiceOption));
-            this._slashCommandBuilder.addStringOption(stringOption);
+            stringOption.setRequired(option.required);
+            stringOption.setName(option.name);
+            stringOption.setDescription(option.description);
+            option.choices.forEach(choiceOption => {
+                stringOption.addChoices(choiceOption);
+            });
+            this._data.addStringOption(stringOption);
         });
     }
     async execute(interaction) {
         throw new Error("Method not implemented.");
     }
-    get slashCommandBuilder() {
-        return this._slashCommandBuilder;
-    }
-    set slashCommandBuilder(value) {
-        this._slashCommandBuilder = value;
+    get data() {
+        return this._data;
     }
     get name() {
         return this._name;
     }
-    set name(value) {
-        this._name = value;
+    set name(name) {
+        this._name = name;
     }
     get type() {
         return this._type;
     }
-    set type(value) {
-        this._type = value;
+    set type(type) {
+        this._type = type;
     }
     get description() {
         return this._description;
     }
-    set description(value) {
-        this._description = value;
+    set description(description) {
+        this._description = description;
     }
-    get choices() {
-        return this._choices;
+    get options() {
+        return this._options;
     }
-    set choices(value) {
-        this._choices = value;
+    set options(value) {
+        this._options = value;
     }
 }
 exports.SlashCommand = SlashCommand;

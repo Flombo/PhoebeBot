@@ -2,8 +2,8 @@ FROM node:latest
 WORKDIR /artbot
 ARG bottoken
 ENV bottoken_env=$bottoken
-RUN apt-get update
-RUN apt-get upgrade
+RUN apt-get -y update
+RUN apt-get -y upgrade
 # need to install the missing chrome dependencies for using puppeteer
 RUN apt-get install -y \
     fonts-liberation \
@@ -39,9 +39,9 @@ RUN apt-get install -y \
     libxtst6 \
     xdg-utils
 COPY package*.json ./
-COPY . .
+COPY dist ./dist
+COPY .env ./
+RUN ls -la ./*
 RUN npm install -g npm@latest
 RUN npm ci
-RUN touch .env
-RUN printf 'BOTTOKEN='$bottoken_env > .env
 RUN npm run start
