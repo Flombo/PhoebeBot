@@ -9,7 +9,7 @@ Discord bot that let artists retrieve reference images in discord from https://q
     - Create your own bot application in the discord developer portal: https://discord.com/developers/applications
     - Copy your bot token & your clientId
     - Clone the repo
-    - Add an .env file with the attributes:
+    - Add an .env file to the root of the project with the attributes:
         - BOTTOKEN='your token'
         - CLIENT_ID='your clientId'
   - Install all dependencies by your own:
