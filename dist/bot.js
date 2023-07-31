@@ -24,6 +24,7 @@ client.on(discord_js_1.Events.InteractionCreate, async (interaction) => {
     const command = availableCommands.get(interaction.commandName);
     try {
         if (command !== undefined) {
+            selectChoosenChoice(interaction, command);
             await command.execute(interaction);
         }
     }
@@ -37,5 +38,17 @@ client.on(discord_js_1.Events.InteractionCreate, async (interaction) => {
         }
     }
 });
+function selectChoosenChoice(interaction, command) {
+    const choosenOptions = interaction.options.data;
+    command.options.forEach(option => {
+        choosenOptions.forEach(choosenOption => {
+            option.choices.forEach(choice => {
+                if (choice.value === choosenOption.value) {
+                    choice.selected = true;
+                }
+            });
+        });
+    });
+}
 client.login(process.env.BOTTOKEN).then(() => console.log('Bot logged in!'));
 //# sourceMappingURL=bot.js.map

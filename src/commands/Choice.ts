@@ -1,10 +1,12 @@
 export class Choice {
     private _name: string;
     private _value: string;
+    private _selected : boolean;
 
     constructor(name : string, value : string) {
         this._name = name;
         this._value = value;
+        this._selected = false;
     }
 
     public get name(): string {
@@ -22,4 +24,13 @@ export class Choice {
     public set value(value: string) {
         this._value = value;
     }
+    
+    public get selected(): boolean {
+        return this._selected;
+    }
+
+    public set selected(value: boolean) {
+        this._selected = value;
+    }
+
 }

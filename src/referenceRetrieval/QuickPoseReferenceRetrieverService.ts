@@ -1,36 +1,40 @@
 import puppeteer, { Browser, Page } from "puppeteer";
+import { Choice } from "../commands/Choice";
+import { CommandOptionChoice } from "../commands/CommandOptionChoice";
 import { ICommand } from "../commands/ICommand";
 import { IReference } from "./IReference";
 import { IReferenceRetrieverService } from "./IReferenceRetrieverService";
 import { QuickPoseReference } from "./QuickPoseReference";
-import { CommandOptionChoice } from "../commands/CommandOptionChoice";
-import { Choice } from "../commands/Choice";
-import { SlashCommand } from "../commands/SlashCommand";
-import { PoseCommand } from "../commands/poseCommands/PoseCommand";
 
 export class QuickPoseReferenceRetrieverService implements IReferenceRetrieverService {
 
     private browser : Browser;
     private page : Page;
+    private alreadyInstantiatedBrowser : boolean;
 
     constructor() {
         this.browser = new Browser();
         this.page = new Page();
+        this.alreadyInstantiatedBrowser = false;
     }
     
     public async getReference(command: ICommand): Promise<IReference> {
 
-        this.browser = await puppeteer.launch({
-            headless: true,
-            args: [
-                "--disable-gpu",
-                "--disable-dev-shm-usage",
-                "--disable-setuid-sandbox",
-                "--no-sandbox",
-            ]
-        });
+        if (!this.alreadyInstantiatedBrowser || this.page.isClosed()) {
+            this.browser = await puppeteer.launch({
+                headless: false,
+                args: [
+                    "--disable-gpu",
+                    "--disable-dev-shm-usage",
+                    "--disable-setuid-sandbox",
+                    "--no-sandbox",
+                ]
+            });
 
-        this.page = await this.browser.newPage();
+            this.page = await this.browser.newPage();
+            this.alreadyInstantiatedBrowser = true;
+        }
+        
         await this.page.goto('https://quickposes.com/en/gestures/random');
 
         await this.makeReferenceSelection(this.page, command);
@@ -43,18 +47,22 @@ export class QuickPoseReferenceRetrieverService implements IReferenceRetrieverSe
     }
 
     public mirrorHorizontal(reference: IReference): IReference {
+        reference.height;
         throw new Error("Method not implemented.");
     }
 
     public mirrorVertical(reference: IReference): IReference {
+        reference.height;
         throw new Error("Method not implemented.");
     }
 
     public rotateClockwise(reference: IReference): IReference {
+        reference.height;
         throw new Error("Method not implemented.");
     }
 
     public rotateCounterClockwise(reference: IReference): IReference {
+        reference.height;
         throw new Error("Method not implemented.");
     }
 
@@ -64,30 +72,30 @@ export class QuickPoseReferenceRetrieverService implements IReferenceRetrieverSe
      * @param options
      * @private
      */
-    private async makeReferenceSelection(page : Page, command : any) : Promise<void> {
+    private async makeReferenceSelection(page : Page, command : ICommand) : Promise<void> {
         await page.evaluate((name : string, options : Array<CommandOptionChoice>) => {
 
-            const items : NodeListOf<HTMLSpanElement> = document.querySelectorAll('span.ui-button-text');
-            if(items !== undefined) {
-                items.forEach((item : HTMLSpanElement) => {
+            options.forEach((option : CommandOptionChoice) => {
+                option.choices.forEach((choice : Choice) => {
+                    if (choice.selected) {
+                        const items : NodeListOf<HTMLSpanElement> = document.querySelectorAll(`input[name="${option.name}"][data-value="${choice.value}"]`);
+                        if (items === undefined) {
+                            return;
+                        }
 
-                    if (item.innerText === name) {
-                        item.click();
-                    }
-
-                    options.forEach((option : CommandOptionChoice) => {
-                        option.choices.forEach((choice : Choice) => {
-                            if(item.innerText === choice.name) {
-                                item.click();
-                            }
+                        items.forEach((item : HTMLSpanElement) => {
+                            item.click();
                         });
-                    });
-
-                    if(item.innerText === 'Start') {
-                        item.click();
                     }
                 });
+            });
+
+            const startButton : HTMLDivElement | null = document.querySelector('div[role="button"]');
+
+            if(startButton !== null) {
+                startButton.click();
             }
+
         }, command.name, command.options);
     }
 
@@ -124,7 +132,6 @@ export class QuickPoseReferenceRetrieverService implements IReferenceRetrieverSe
             });
         });
 
-        console.log(imageData)
         const reference : IReference = Object.assign(new QuickPoseReference(), JSON.parse(imageData));
 
         return reference;

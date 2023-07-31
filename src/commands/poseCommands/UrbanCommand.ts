@@ -1,8 +1,7 @@
 import { CommandOptionChoice } from "../CommandOptionChoice";
-import { PoseCommandType } from "./PoseCommandType";
-import { SlashCommand } from "../SlashCommand";
-import { EmbedBuilder, InteractionResponse } from "discord.js";
 import { CommandType } from "../CommandType";
+import { SlashCommand } from "../SlashCommand";
+import { PoseCommandType } from "./PoseCommandType";
 
 export class UrbanCommand extends SlashCommand {
 

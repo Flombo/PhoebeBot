@@ -1,12 +1,9 @@
 // Require the necessary discord.js classes
-import { Client, Events, GatewayIntentBits } from 'discord.js';
-import {config} from "dotenv";
+import { ChatInputCommandInteraction, Client, Events, GatewayIntentBits } from 'discord.js';
+import { config } from "dotenv";
 import { CommandBuilder } from './CommandBuilder';
-import { ICommand } from './commands/ICommand';
 import { CommandRegistry } from './CommandRegistry';
-import { PoseCommandType } from './commands/poseCommands/PoseCommandType';
-import { PoseCommand } from './commands/poseCommands/PoseCommand';
-import { AnimalCommand } from './commands/poseCommands/AnimalCommand';
+import { ICommand } from './commands/ICommand';
 
 config();
 
@@ -37,6 +34,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 	try {
 		if(command !== undefined) {
+			selectChoosenChoice(interaction, command);
 			await command.execute(interaction);
 		}
 	} catch (error) {
@@ -48,6 +46,19 @@ client.on(Events.InteractionCreate, async interaction => {
 		}
 	}
 });
+
+function selectChoosenChoice(interaction : ChatInputCommandInteraction, command : ICommand) : void {
+	const choosenOptions = interaction.options.data;
+	command.options.forEach(option => {
+		choosenOptions.forEach(choosenOption => {
+			option.choices.forEach(choice => {
+				if(choice.value === choosenOption.value) {
+					choice.selected = true;
+				}
+			})
+		});
+	});
+}
 
 // Log in to Discord with your client's token
 client.login(process.env.BOTTOKEN).then(() => console.log('Bot logged in!'));

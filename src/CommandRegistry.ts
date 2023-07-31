@@ -1,5 +1,5 @@
-import { ICommand } from "./commands/ICommand";
 import { REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from "discord.js";
+import { ICommand } from "./commands/ICommand";
 
 export class CommandRegistry {
 

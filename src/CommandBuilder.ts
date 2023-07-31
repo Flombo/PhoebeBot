@@ -1,14 +1,14 @@
+import * as fs from 'fs';
 import path from "path";
 import { ICommand } from "./commands/ICommand";
-import * as fs from 'fs';
-import { DefaultCommand } from "./commands/poseCommands/DefaultCommand";
-import { PoseCommandType } from "./commands/poseCommands/PoseCommandType";
-import { PoseCommand } from "./commands/poseCommands/PoseCommand";
 import { AnimalCommand } from "./commands/poseCommands/AnimalCommand";
+import { DefaultCommand } from "./commands/poseCommands/DefaultCommand";
 import { FaceCommand } from "./commands/poseCommands/FaceCommand";
 import { HandCommand } from "./commands/poseCommands/HandCommand";
-import { UrbanCommand } from "./commands/poseCommands/UrbanCommand";
 import { LandscapeCommand } from "./commands/poseCommands/LandscapeCommand";
+import { PoseCommand } from "./commands/poseCommands/PoseCommand";
+import { PoseCommandType } from "./commands/poseCommands/PoseCommandType";
+import { UrbanCommand } from "./commands/poseCommands/UrbanCommand";
 
 export class CommandBuilder {
 

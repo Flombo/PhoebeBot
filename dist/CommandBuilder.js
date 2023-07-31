@@ -2,16 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommandBuilder = void 0;
 const tslib_1 = require("tslib");
-const path_1 = tslib_1.__importDefault(require("path"));
 const fs = tslib_1.__importStar(require("fs"));
-const DefaultCommand_1 = require("./commands/poseCommands/DefaultCommand");
-const PoseCommandType_1 = require("./commands/poseCommands/PoseCommandType");
-const PoseCommand_1 = require("./commands/poseCommands/PoseCommand");
+const path_1 = tslib_1.__importDefault(require("path"));
 const AnimalCommand_1 = require("./commands/poseCommands/AnimalCommand");
+const DefaultCommand_1 = require("./commands/poseCommands/DefaultCommand");
 const FaceCommand_1 = require("./commands/poseCommands/FaceCommand");
 const HandCommand_1 = require("./commands/poseCommands/HandCommand");
-const UrbanCommand_1 = require("./commands/poseCommands/UrbanCommand");
 const LandscapeCommand_1 = require("./commands/poseCommands/LandscapeCommand");
+const PoseCommand_1 = require("./commands/poseCommands/PoseCommand");
+const PoseCommandType_1 = require("./commands/poseCommands/PoseCommandType");
+const UrbanCommand_1 = require("./commands/poseCommands/UrbanCommand");
 class CommandBuilder {
     _commands = new Map();
     commandsPath = path_1.default.join(__dirname, 'commands/commandJSON');

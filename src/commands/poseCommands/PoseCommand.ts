@@ -1,7 +1,7 @@
-import { SlashCommand } from "../SlashCommand";
 import { CommandOptionChoice } from "../CommandOptionChoice";
-import { PoseCommandType } from "./PoseCommandType";
 import { CommandType } from "../CommandType";
+import { SlashCommand } from "../SlashCommand";
+import { PoseCommandType } from "./PoseCommandType";
 
 export class PoseCommand extends SlashCommand {
 

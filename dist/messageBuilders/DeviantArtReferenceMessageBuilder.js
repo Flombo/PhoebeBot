@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeviantArtReferenceMessageBuilder = void 0;
 class DeviantArtReferenceMessageBuilder {
     buildReferenceMessage(reference) {
+        reference.height;
         throw new Error("Method not implemented.");
     }
 }

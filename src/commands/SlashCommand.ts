@@ -1,17 +1,18 @@
-import { ChatInputCommandInteraction, EmbedBuilder, Interaction, InteractionResponse, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
-import { ICommand } from "./ICommand";
-import { CommandOptionChoice } from "./CommandOptionChoice";
-import { PoseCommandType } from "./poseCommands/PoseCommandType";
-import { IMessageBuilder } from "../messageBuilders/IMessageBuilder";
-import { QuickPoseMessageBuilder } from "../messageBuilders/QuickPoseMessageBuilder";
-import { IReferenceRetrieverService } from "../referenceRetrieval/IReferenceRetrieverService";
-import { QuickPoseReferenceRetrieverService } from "../referenceRetrieval/QuickPoseReferenceRetrieverService";
-import { IReference } from "../referenceRetrieval/IReference";
-import { CommandType } from "./CommandType";
-import { DeviantArtReferenceRetrieverService } from "../referenceRetrieval/DeviantArtReferenceRetrieverService";
-import { GoogleReferenceRetrieverService } from "../referenceRetrieval/GoogleReferenceRetrieverService";
+import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { DeviantArtReferenceMessageBuilder } from "../messageBuilders/DeviantArtReferenceMessageBuilder";
 import { GoogleReferenceMessageBuilder } from "../messageBuilders/GoogleReferenceMessageBuilder";
+import { IMessageBuilder } from "../messageBuilders/IMessageBuilder";
+import { QuickPoseMessageBuilder } from "../messageBuilders/QuickPoseMessageBuilder";
+import { DeviantArtReferenceRetrieverService } from "../referenceRetrieval/DeviantArtReferenceRetrieverService";
+import { GoogleReferenceRetrieverService } from "../referenceRetrieval/GoogleReferenceRetrieverService";
+import { IReference } from "../referenceRetrieval/IReference";
+import { IReferenceRetrieverService } from "../referenceRetrieval/IReferenceRetrieverService";
+import { QuickPoseReferenceRetrieverService } from "../referenceRetrieval/QuickPoseReferenceRetrieverService";
+import { Choice } from "./Choice";
+import { CommandOptionChoice } from "./CommandOptionChoice";
+import { CommandType } from "./CommandType";
+import { ICommand } from "./ICommand";
+import { PoseCommandType } from "./poseCommands/PoseCommandType";
 
 export abstract class SlashCommand implements ICommand {
 
@@ -76,10 +77,11 @@ export abstract class SlashCommand implements ICommand {
         });
     }
 
-    public async execute(interaction: ChatInputCommandInteraction): Promise<InteractionResponse<boolean>> {
+    public async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+        await interaction.reply('Retrieving reference');
         const reference : IReference = await this.referenceService.getReference(this);
         const embedBuilder : EmbedBuilder = this.messageBuilder.buildReferenceMessage(reference);
-        return await interaction.reply({embeds : [embedBuilder]});
+        await interaction.followUp({embeds : [embedBuilder]});
     }
 
     public get data(): SlashCommandBuilder {
@@ -116,6 +118,14 @@ export abstract class SlashCommand implements ICommand {
 
     public set options(value : Array<CommandOptionChoice>) {
         this._options = value;
+    }
+
+    getSelectedChoices(): Array<Choice> {
+        let selectedChoices : Array<Choice> = new Array();
+        this.options.forEach((option : CommandOptionChoice) => {
+            selectedChoices.push(...(option.choices.filter((choice : Choice) => choice.selected)));
+        });
+        return selectedChoices;
     }
 
 }

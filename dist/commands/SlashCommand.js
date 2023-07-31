@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SlashCommand = void 0;
 const discord_js_1 = require("discord.js");
-const QuickPoseMessageBuilder_1 = require("../messageBuilders/QuickPoseMessageBuilder");
-const QuickPoseReferenceRetrieverService_1 = require("../referenceRetrieval/QuickPoseReferenceRetrieverService");
-const CommandType_1 = require("./CommandType");
-const DeviantArtReferenceRetrieverService_1 = require("../referenceRetrieval/DeviantArtReferenceRetrieverService");
-const GoogleReferenceRetrieverService_1 = require("../referenceRetrieval/GoogleReferenceRetrieverService");
 const DeviantArtReferenceMessageBuilder_1 = require("../messageBuilders/DeviantArtReferenceMessageBuilder");
 const GoogleReferenceMessageBuilder_1 = require("../messageBuilders/GoogleReferenceMessageBuilder");
+const QuickPoseMessageBuilder_1 = require("../messageBuilders/QuickPoseMessageBuilder");
+const DeviantArtReferenceRetrieverService_1 = require("../referenceRetrieval/DeviantArtReferenceRetrieverService");
+const GoogleReferenceRetrieverService_1 = require("../referenceRetrieval/GoogleReferenceRetrieverService");
+const QuickPoseReferenceRetrieverService_1 = require("../referenceRetrieval/QuickPoseReferenceRetrieverService");
+const CommandType_1 = require("./CommandType");
 class SlashCommand {
     _data;
     _name;
@@ -57,9 +57,10 @@ class SlashCommand {
         });
     }
     async execute(interaction) {
+        await interaction.reply('Retrieving reference');
         const reference = await this.referenceService.getReference(this);
         const embedBuilder = this.messageBuilder.buildReferenceMessage(reference);
-        return await interaction.reply({ embeds: [embedBuilder] });
+        await interaction.followUp({ embeds: [embedBuilder] });
     }
     get data() {
         return this._data;
@@ -87,6 +88,13 @@ class SlashCommand {
     }
     set options(value) {
         this._options = value;
+    }
+    getSelectedChoices() {
+        let selectedChoices = new Array();
+        this.options.forEach((option) => {
+            selectedChoices.push(...(option.choices.filter((choice) => choice.selected)));
+        });
+        return selectedChoices;
     }
 }
 exports.SlashCommand = SlashCommand;
