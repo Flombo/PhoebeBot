@@ -1,4 +1,4 @@
-import { Interaction, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, Interaction, InteractionResponse, SlashCommandBuilder } from "discord.js";
 import { CommandOptionChoice } from "./CommandOptionChoice";
 import { PoseCommandType } from "./poseCommands/PoseCommandType";
 
@@ -6,7 +6,7 @@ export interface ICommand {
 
     initSlashCommand() : void;
 
-    execute(interaction : Interaction) : Promise<void>;
+    execute(interaction : ChatInputCommandInteraction) : Promise<InteractionResponse<boolean>>;
 
     get options() : Array<CommandOptionChoice>;
 

@@ -1,7 +1,17 @@
-import { Interaction, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder, Interaction, InteractionResponse, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { ICommand } from "./ICommand";
 import { CommandOptionChoice } from "./CommandOptionChoice";
 import { PoseCommandType } from "./poseCommands/PoseCommandType";
+import { IMessageBuilder } from "../messageBuilders/IMessageBuilder";
+import { QuickPoseMessageBuilder } from "../messageBuilders/QuickPoseMessageBuilder";
+import { IReferenceRetrieverService } from "../referenceRetrieval/IReferenceRetrieverService";
+import { QuickPoseReferenceRetrieverService } from "../referenceRetrieval/QuickPoseReferenceRetrieverService";
+import { IReference } from "../referenceRetrieval/IReference";
+import { CommandType } from "./CommandType";
+import { DeviantArtReferenceRetrieverService } from "../referenceRetrieval/DeviantArtReferenceRetrieverService";
+import { GoogleReferenceRetrieverService } from "../referenceRetrieval/GoogleReferenceRetrieverService";
+import { DeviantArtReferenceMessageBuilder } from "../messageBuilders/DeviantArtReferenceMessageBuilder";
+import { GoogleReferenceMessageBuilder } from "../messageBuilders/GoogleReferenceMessageBuilder";
 
 export abstract class SlashCommand implements ICommand {
 
@@ -14,13 +24,35 @@ export abstract class SlashCommand implements ICommand {
     private _description: string;
 
     private _options: Array<CommandOptionChoice>;
+
+    private referenceService : IReferenceRetrieverService;
+    private messageBuilder : IMessageBuilder;
     
-    constructor(name : string, description : string, type : PoseCommandType, options : Array<CommandOptionChoice>) {
+    constructor(name : string, description : string, type : PoseCommandType, options : Array<CommandOptionChoice>, commandType : CommandType) {
         this._name = name;
         this._description = description;
         this._type = type;
         this._options = options;
         this._data = new SlashCommandBuilder();
+
+        switch(commandType) {
+            case CommandType.Quickpose:
+                this.referenceService = new QuickPoseReferenceRetrieverService();
+                this.messageBuilder = new QuickPoseMessageBuilder();
+                break;
+            case CommandType.DeviantArt:
+                this.referenceService = new DeviantArtReferenceRetrieverService();
+                this.messageBuilder =  new DeviantArtReferenceMessageBuilder();
+                break;
+            case CommandType.Google:
+                this.referenceService = new GoogleReferenceRetrieverService();
+                this.messageBuilder = new GoogleReferenceMessageBuilder();
+                break;
+            default:
+                this.referenceService = new QuickPoseReferenceRetrieverService();
+                this.messageBuilder = new QuickPoseMessageBuilder();
+                break;
+        }
     }
 
     /**
@@ -44,8 +76,10 @@ export abstract class SlashCommand implements ICommand {
         });
     }
 
-    public async execute(interaction: any): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async execute(interaction: ChatInputCommandInteraction): Promise<InteractionResponse<boolean>> {
+        const reference : IReference = await this.referenceService.getReference(this);
+        const embedBuilder : EmbedBuilder = this.messageBuilder.buildReferenceMessage(reference);
+        return await interaction.reply({embeds : [embedBuilder]});
     }
 
     public get data(): SlashCommandBuilder {
