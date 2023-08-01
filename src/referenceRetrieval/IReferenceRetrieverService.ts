@@ -5,12 +5,12 @@ export interface IReferenceRetrieverService {
 
     getReference(command : ICommand) : Promise<IReference>;
 
-    mirrorHorizontal(reference : IReference) : IReference;
+    mirrorHorizontal(reference : IReference) : Promise<IReference>;
 
-    mirrorVertical(reference : IReference) : IReference;
+    mirrorVertical(reference : IReference) : Promise<IReference>;
 
-    rotateClockwise(reference : IReference) : IReference;
+    rotateClockwise(reference : IReference) : Promise<IReference>;
 
-    rotateCounterClockwise(reference : IReference) : IReference;
+    rotateCounterClockwise(reference : IReference) : Promise<IReference>;
 
 }

@@ -4,11 +4,13 @@ exports.QuickPoseReferenceRetrieverService = void 0;
 const tslib_1 = require("tslib");
 const puppeteer_1 = tslib_1.__importStar(require("puppeteer"));
 const QuickPoseReference_1 = require("./QuickPoseReference");
-class QuickPoseReferenceRetrieverService {
+const ReferenceRetrieverService_1 = require("./ReferenceRetrieverService");
+class QuickPoseReferenceRetrieverService extends ReferenceRetrieverService_1.ReferenceRetrieverService {
     browser;
     page;
     alreadyInstantiatedBrowser;
     constructor() {
+        super();
         this.browser = new puppeteer_1.Browser();
         this.page = new puppeteer_1.Page();
         this.alreadyInstantiatedBrowser = false;
@@ -16,7 +18,7 @@ class QuickPoseReferenceRetrieverService {
     async getReference(command) {
         if (!this.alreadyInstantiatedBrowser || this.page.isClosed()) {
             this.browser = await puppeteer_1.default.launch({
-                headless: false,
+                headless: true,
                 args: [
                     "--disable-gpu",
                     "--disable-dev-shm-usage",
@@ -34,24 +36,12 @@ class QuickPoseReferenceRetrieverService {
         reference.owner = await this.retrieveReferenceOwner(this.page);
         return reference;
     }
-    mirrorHorizontal(reference) {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-    mirrorVertical(reference) {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-    rotateClockwise(reference) {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-    rotateCounterClockwise(reference) {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
     async makeReferenceSelection(page, command) {
-        await page.evaluate((name, options) => {
+        await page.evaluate((commandType, options) => {
+            const typeInput = document.querySelector(`input[name="type"][data-value="${commandType}`);
+            if (typeInput !== null) {
+                typeInput.click();
+            }
             options.forEach((option) => {
                 option.choices.forEach((choice) => {
                     if (choice.selected) {

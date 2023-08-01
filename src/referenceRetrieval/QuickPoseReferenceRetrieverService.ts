@@ -3,16 +3,17 @@ import { Choice } from "../commands/Choice";
 import { CommandOptionChoice } from "../commands/CommandOptionChoice";
 import { ICommand } from "../commands/ICommand";
 import { IReference } from "./IReference";
-import { IReferenceRetrieverService } from "./IReferenceRetrieverService";
 import { QuickPoseReference } from "./QuickPoseReference";
+import { ReferenceRetrieverService } from "./ReferenceRetrieverService";
 
-export class QuickPoseReferenceRetrieverService implements IReferenceRetrieverService {
+export class QuickPoseReferenceRetrieverService extends ReferenceRetrieverService {
 
     private browser : Browser;
     private page : Page;
     private alreadyInstantiatedBrowser : boolean;
 
     constructor() {
+        super();
         this.browser = new Browser();
         this.page = new Page();
         this.alreadyInstantiatedBrowser = false;
@@ -22,7 +23,7 @@ export class QuickPoseReferenceRetrieverService implements IReferenceRetrieverSe
 
         if (!this.alreadyInstantiatedBrowser || this.page.isClosed()) {
             this.browser = await puppeteer.launch({
-                headless: false,
+                headless: true,
                 args: [
                     "--disable-gpu",
                     "--disable-dev-shm-usage",
@@ -46,26 +47,6 @@ export class QuickPoseReferenceRetrieverService implements IReferenceRetrieverSe
         return reference;
     }
 
-    public mirrorHorizontal(reference: IReference): IReference {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-
-    public mirrorVertical(reference: IReference): IReference {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-
-    public rotateClockwise(reference: IReference): IReference {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-
-    public rotateCounterClockwise(reference: IReference): IReference {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-
     /**
      * Selects the reference options on the side equal to the entered command options and clicks on the Start-button.
      * @param page
@@ -73,17 +54,22 @@ export class QuickPoseReferenceRetrieverService implements IReferenceRetrieverSe
      * @private
      */
     private async makeReferenceSelection(page : Page, command : ICommand) : Promise<void> {
-        await page.evaluate((name : string, options : Array<CommandOptionChoice>) => {
+        await page.evaluate((commandType : string, options : Array<CommandOptionChoice>) => {
+            const typeInput : HTMLInputElement | null = document.querySelector(`input[name="type"][data-value="${commandType}`);
+
+            if(typeInput !== null) {
+                typeInput.click();
+            }
 
             options.forEach((option : CommandOptionChoice) => {
                 option.choices.forEach((choice : Choice) => {
                     if (choice.selected) {
-                        const items : NodeListOf<HTMLSpanElement> = document.querySelectorAll(`input[name="${option.name}"][data-value="${choice.value}"]`);
+                        const items : NodeListOf<HTMLInputElement> = document.querySelectorAll(`input[name="${option.name}"][data-value="${choice.value}"]`);
                         if (items === undefined) {
                             return;
                         }
 
-                        items.forEach((item : HTMLSpanElement) => {
+                        items.forEach((item : HTMLInputElement) => {
                             item.click();
                         });
                     }

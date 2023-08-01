@@ -60,7 +60,13 @@ class SlashCommand {
         await interaction.reply('Retrieving reference');
         const reference = await this.referenceService.getReference(this);
         const embedBuilder = this.messageBuilder.buildReferenceMessage(reference);
-        await interaction.followUp({ embeds: [embedBuilder] });
+        if (reference.imageData.length > 0) {
+            const attachementBuilder = this.messageBuilder.buildImageAttachment(reference.imageData);
+            await interaction.followUp({ embeds: [embedBuilder], files: [attachementBuilder] });
+        }
+        else {
+            await interaction.followUp({ embeds: [embedBuilder] });
+        }
     }
     get data() {
         return this._data;

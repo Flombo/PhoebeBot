@@ -1,26 +1,11 @@
 import { ICommand } from "../commands/ICommand";
 import { IReference } from "./IReference";
-import { IReferenceRetrieverService } from "./IReferenceRetrieverService";
+import { ReferenceRetrieverService } from "./ReferenceRetrieverService";
 
-export class GoogleReferenceRetrieverService implements IReferenceRetrieverService {
+export class GoogleReferenceRetrieverService extends ReferenceRetrieverService {
+    
     getReference(command: ICommand): Promise<IReference> {
         command.data
-        throw new Error("Method not implemented.");
-    }
-    mirrorHorizontal(reference: IReference): IReference {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-    mirrorVertical(reference: IReference): IReference {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-    rotateClockwise(reference: IReference): IReference {
-        reference.height;
-        throw new Error("Method not implemented.");
-    }
-    rotateCounterClockwise(reference: IReference): IReference {
-        reference.height;
         throw new Error("Method not implemented.");
     }
     

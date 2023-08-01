@@ -12,7 +12,7 @@ class QuickPoseReference {
         this._width = width;
         this._height = height;
         this._owner = owner;
-        this._imageData = imageData !== undefined ? imageData : "";
+        this._imageData = imageData !== undefined ? imageData : Buffer.from("");
     }
     get url() {
         return this._url;

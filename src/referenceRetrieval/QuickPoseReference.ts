@@ -6,14 +6,14 @@ export class QuickPoseReference implements IReference {
     private _width : number;
     private _height : number;
     private _owner : string;
-    private _imageData : string;
+    private _imageData : Buffer;
 
-    constructor(url : string = '', width : number = 0, height : number = 0, owner : string = '', imageData? : string) {
+    constructor(url : string = '', width : number = 0, height : number = 0, owner : string = '', imageData? : Buffer) {
         this._url = url;
         this._width = width;
         this._height = height;
         this._owner = owner;
-        this._imageData = imageData !== undefined ? imageData : "";
+        this._imageData = imageData !== undefined ? imageData : Buffer.from("");
     }
 
     get url(): string {
@@ -48,11 +48,11 @@ export class QuickPoseReference implements IReference {
         this._owner = value;
     }
     
-    get imageData(): string {
+    get imageData(): Buffer {
         return this._imageData;
     }
     
-    set imageData(value: string) {
+    set imageData(value: Buffer) {
         this._imageData = value;
     }
     

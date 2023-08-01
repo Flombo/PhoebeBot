@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { DeviantArtReferenceMessageBuilder } from "../messageBuilders/DeviantArtReferenceMessageBuilder";
 import { GoogleReferenceMessageBuilder } from "../messageBuilders/GoogleReferenceMessageBuilder";
 import { IMessageBuilder } from "../messageBuilders/IMessageBuilder";
@@ -81,7 +81,12 @@ export abstract class SlashCommand implements ICommand {
         await interaction.reply('Retrieving reference');
         const reference : IReference = await this.referenceService.getReference(this);
         const embedBuilder : EmbedBuilder = this.messageBuilder.buildReferenceMessage(reference);
-        await interaction.followUp({embeds : [embedBuilder]});
+        if(reference.imageData.length > 0) {
+            const attachementBuilder : AttachmentBuilder = this.messageBuilder.buildImageAttachment(reference.imageData);
+            await interaction.followUp({embeds : [embedBuilder], files: [attachementBuilder]});
+        } else {
+            await interaction.followUp({embeds : [embedBuilder]});
+        }
     }
 
     public get data(): SlashCommandBuilder {

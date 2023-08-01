@@ -2,7 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuickPoseMessageBuilder = void 0;
 const discord_js_1 = require("discord.js");
-class QuickPoseMessageBuilder {
+const MessageBuilder_1 = require("./MessageBuilder");
+class QuickPoseMessageBuilder extends MessageBuilder_1.MessageBuilder {
+    buildImageAttachment(buffer) {
+        const attachementBuilder = new discord_js_1.AttachmentBuilder(buffer);
+        return attachementBuilder;
+    }
     buildReferenceMessage(reference) {
         const embedBuilder = new discord_js_1.EmbedBuilder();
         embedBuilder.setColor(0x0099FF)

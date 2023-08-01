@@ -1,10 +1,15 @@
-import { EmbedBuilder } from "discord.js";
+import { AttachmentBuilder, EmbedBuilder } from "discord.js";
 import { IReference } from "../referenceRetrieval/IReference";
-import { IMessageBuilder } from "./IMessageBuilder";
+import { MessageBuilder } from "./MessageBuilder";
 
-export class QuickPoseMessageBuilder implements IMessageBuilder {
+export class QuickPoseMessageBuilder extends MessageBuilder {
     
-    buildReferenceMessage(reference: IReference): EmbedBuilder {
+    public buildImageAttachment(buffer: Buffer): AttachmentBuilder {
+        const attachementBuilder : AttachmentBuilder = new AttachmentBuilder(buffer);
+        return attachementBuilder;
+    }
+    
+    public buildReferenceMessage(reference: IReference): EmbedBuilder {
         const embedBuilder : EmbedBuilder = new EmbedBuilder();
         embedBuilder.setColor(0x0099FF)
             .setTitle('Reference pose')

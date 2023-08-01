@@ -16,8 +16,8 @@ export interface IReference {
 
     set owner(value : string);
 
-    get imageData() : string;
+    get imageData() : Buffer;
 
-    set imageData(value : string);
+    set imageData(value : Buffer);
 
 }
