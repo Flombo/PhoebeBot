@@ -1,6 +1,6 @@
-import * as fs from 'fs';
 import path from "path";
-import { ICommand } from "./commands/ICommand";
+import { ComponentFilesHelper } from './ComponentFilesHelper';
+import { IReferenceCommand } from "./commands/IReferenceCommand";
 import { AnimalCommand } from "./commands/poseCommands/AnimalCommand";
 import { DefaultCommand } from "./commands/poseCommands/DefaultCommand";
 import { FaceCommand } from "./commands/poseCommands/FaceCommand";
@@ -12,82 +12,62 @@ import { UrbanCommand } from "./commands/poseCommands/UrbanCommand";
 
 export class CommandBuilder {
 
-    private _commands: Map<string, ICommand> = new Map();
+    private _commands: Map<string, IReferenceCommand> = new Map();
 
     private commandsPath = path.join(__dirname, 'commands/commandJSON');
-
-    private commandFiles : Array<string> = new Array();
 
     /**
      * Builds all available slash commands from json files. 
      */
     public buildCommands() {
         try {
-            this.findJSONCommandFiles(this.commandsPath);
-            this.commandFiles.forEach(commandFile => {
-	            const command : ICommand = Object.assign(new DefaultCommand(), require(commandFile));
+            const componentFilesHelper: ComponentFilesHelper = new ComponentFilesHelper();
+            componentFilesHelper.findJSONComponentFiles(this.commandsPath);
+            const commandFiles: Array<string> = componentFilesHelper.componentFiles;
 
-                switch(command.name) {
+            commandFiles.forEach(commandFile => {
+                const command: IReferenceCommand = Object.assign(new DefaultCommand(), require(commandFile));
+
+                switch (command.name) {
                     case PoseCommandType[PoseCommandType.pose]:
-                        const poseCommand : PoseCommand = new PoseCommand(command.name, command.description, command.options);
+                        const poseCommand: PoseCommand = new PoseCommand(command.name, command.description, command.options);
                         poseCommand.initSlashCommand();
                         this._commands.set(command.name, poseCommand);
                         break;
                     case PoseCommandType[PoseCommandType.animals]:
-                        const animalCommand : AnimalCommand = new AnimalCommand(command.name, command.description, command.options);
+                        const animalCommand: AnimalCommand = new AnimalCommand(command.name, command.description, command.options);
                         animalCommand.initSlashCommand();
                         this._commands.set(command.name, animalCommand);
                         break;
                     case PoseCommandType[PoseCommandType.face]:
-                        const faceCommand : FaceCommand = new FaceCommand(command.name, command.description, command.options);
+                        const faceCommand: FaceCommand = new FaceCommand(command.name, command.description, command.options);
                         faceCommand.initSlashCommand();
                         this._commands.set(command.name, faceCommand);
                         break;
                     case PoseCommandType[PoseCommandType.hands]:
-                        const handCommand : HandCommand = new HandCommand(command.name, command.description, command.options);
+                        const handCommand: HandCommand = new HandCommand(command.name, command.description, command.options);
                         handCommand.initSlashCommand();
                         this._commands.set(command.name, handCommand);
                         break;
                     case PoseCommandType[PoseCommandType.urban]:
-                        const urbanCommand : UrbanCommand = new UrbanCommand(command.name, command.description, command.options);
+                        const urbanCommand: UrbanCommand = new UrbanCommand(command.name, command.description, command.options);
                         urbanCommand.initSlashCommand();
                         this._commands.set(command.name, urbanCommand);
                         break;
                     case PoseCommandType[PoseCommandType.landscapes]:
-                        const landscapeCommand : LandscapeCommand = new LandscapeCommand(command.name, command.description, command.options);
+                        const landscapeCommand: LandscapeCommand = new LandscapeCommand(command.name, command.description, command.options);
                         landscapeCommand.initSlashCommand();
                         this._commands.set(command.name, landscapeCommand);
                         break;
                 }
 
             });
-            this.commandFiles = [];
-        } catch(exception) {
+        } catch (exception) {
             console.log(exception);
         }
     }
 
-    /**
-     * Recursive command json retrieval.
-     * @param filePath 
-     */
-    private findJSONCommandFiles(filePath : string) : void {
-        const filesInDirectory = fs.readdirSync(filePath);
-
-        filesInDirectory.forEach(file => {
-            const absolutePath = path.join(filePath, file);
-
-            if (fs.statSync(absolutePath).isDirectory()) {
-                this.findJSONCommandFiles(absolutePath);
-            } else {
-                if(file.includes('.json')) {
-                    this.commandFiles.push(absolutePath);
-                }
-            }
-        });
-    }
-
-    public get commands(): Map<string, ICommand> {
+    public get commands(): Map<string, IReferenceCommand> {
         return this._commands;
     }
 

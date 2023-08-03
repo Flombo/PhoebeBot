@@ -1,5 +1,5 @@
 import { REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from "discord.js";
-import { ICommand } from "./commands/ICommand";
+import { IReferenceCommand } from "./commands/IReferenceCommand";
 
 export class CommandRegistry {
 
@@ -9,25 +9,25 @@ export class CommandRegistry {
      * @param clientId 
      * @param token 
      */
-    public static async registerCommands(commands : Map<string, ICommand>, clientId : string | undefined, token : string | undefined) : Promise<void> {
-        
-        if(token === undefined || clientId === undefined) {
+    public static async registerCommands(commands: Map<string, IReferenceCommand>, clientId: string | undefined, token: string | undefined): Promise<void> {
+
+        if (token === undefined || clientId === undefined) {
             throw new Error("Token or clientId undefined");
         }
-        
-        const commandDataJSON : Array<RESTPostAPIChatInputApplicationCommandsJSONBody> = new Array();
+
+        const commandDataJSON: Array<RESTPostAPIChatInputApplicationCommandsJSONBody> = new Array();
         try {
-            commands.forEach((value : ICommand) => commandDataJSON.push(value.data.toJSON()));
-            const rest : REST = new REST();
+            commands.forEach((value: IReferenceCommand) => commandDataJSON.push(value.data.toJSON()));
+            const rest: REST = new REST();
             rest.setToken(token),
-            console.log(`Started refreshing ${commandDataJSON.length} application (/) commands.`);
+                console.log(`Started refreshing ${commandDataJSON.length} application (/) commands.`);
             await rest.put(
                 Routes.applicationCommands(clientId),
                 { body: commandDataJSON }
             );
-    
+
             console.log(`Successfully reloaded ${commandDataJSON.length} application (/) commands.`);
-        } catch (error : any) {
+        } catch (error: any) {
             console.log(error);
         }
     }

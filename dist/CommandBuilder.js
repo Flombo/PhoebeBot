@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommandBuilder = void 0;
 const tslib_1 = require("tslib");
-const fs = tslib_1.__importStar(require("fs"));
 const path_1 = tslib_1.__importDefault(require("path"));
+const ComponentFilesHelper_1 = require("./ComponentFilesHelper");
 const AnimalCommand_1 = require("./commands/poseCommands/AnimalCommand");
 const DefaultCommand_1 = require("./commands/poseCommands/DefaultCommand");
 const FaceCommand_1 = require("./commands/poseCommands/FaceCommand");
@@ -15,11 +15,12 @@ const UrbanCommand_1 = require("./commands/poseCommands/UrbanCommand");
 class CommandBuilder {
     _commands = new Map();
     commandsPath = path_1.default.join(__dirname, 'commands/commandJSON');
-    commandFiles = new Array();
     buildCommands() {
         try {
-            this.findJSONCommandFiles(this.commandsPath);
-            this.commandFiles.forEach(commandFile => {
+            const componentFilesHelper = new ComponentFilesHelper_1.ComponentFilesHelper();
+            componentFilesHelper.findJSONComponentFiles(this.commandsPath);
+            const commandFiles = componentFilesHelper.componentFiles;
+            commandFiles.forEach(commandFile => {
                 const command = Object.assign(new DefaultCommand_1.DefaultCommand(), require(commandFile));
                 switch (command.name) {
                     case PoseCommandType_1.PoseCommandType[PoseCommandType_1.PoseCommandType.pose]:
@@ -54,25 +55,10 @@ class CommandBuilder {
                         break;
                 }
             });
-            this.commandFiles = [];
         }
         catch (exception) {
             console.log(exception);
         }
-    }
-    findJSONCommandFiles(filePath) {
-        const filesInDirectory = fs.readdirSync(filePath);
-        filesInDirectory.forEach(file => {
-            const absolutePath = path_1.default.join(filePath, file);
-            if (fs.statSync(absolutePath).isDirectory()) {
-                this.findJSONCommandFiles(absolutePath);
-            }
-            else {
-                if (file.includes('.json')) {
-                    this.commandFiles.push(absolutePath);
-                }
-            }
-        });
     }
     get commands() {
         return this._commands;

@@ -42,6 +42,22 @@ class SlashCommand {
                 break;
         }
     }
+    async mirrorHorizontal(reference, interaction) {
+        const transformedReference = await this.referenceService.mirrorHorizontal(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+    async mirrorVertical(reference, interaction) {
+        const transformedReference = await this.referenceService.mirrorVertical(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+    async rotateClockwise(reference, interaction) {
+        const transformedReference = await this.referenceService.rotateClockwise(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+    async rotateCounterClockwise(reference, interaction) {
+        const transformedReference = await this.referenceService.rotateCounterClockwise(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
     initSlashCommand() {
         this._data.setName(this.name)
             .setDescription(this.description);
@@ -57,15 +73,18 @@ class SlashCommand {
         });
     }
     async execute(interaction) {
-        await interaction.reply('Retrieving reference');
         const reference = await this.referenceService.getReference(this);
+        await this.sendReply(interaction, reference);
+    }
+    async sendReply(interaction, reference) {
         const embedBuilder = this.messageBuilder.buildReferenceMessage(reference);
+        const rows = this.messageBuilder.buildReferenceButtons();
         if (reference.imageData.length > 0) {
             const attachementBuilder = this.messageBuilder.buildImageAttachment(reference.imageData);
-            await interaction.followUp({ embeds: [embedBuilder], files: [attachementBuilder] });
+            await interaction.followUp({ embeds: [embedBuilder], files: [attachementBuilder], components: [rows] });
         }
         else {
-            await interaction.followUp({ embeds: [embedBuilder] });
+            await interaction.followUp({ embeds: [embedBuilder], components: [rows] });
         }
     }
     get data() {
