@@ -17,7 +17,7 @@ client.once(discord_js_1.Events.ClientReady, c => {
 });
 client.on(discord_js_1.Events.InteractionCreate, async (interaction) => {
     if (interaction.isChatInputCommand()) {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ ephemeral: false });
         const availableCommands = commandBuilder.commands;
         const hasCommand = availableCommands.has(interaction.commandName);
         if (!hasCommand) {
@@ -42,7 +42,7 @@ client.on(discord_js_1.Events.InteractionCreate, async (interaction) => {
         }
     }
     else if (interaction.isButton()) {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ ephemeral: false });
         const embeds = interaction.message.embeds;
         if (embeds.length == 0) {
             await interaction.reply({ content: 'There was an error while executing this interaction!', ephemeral: true });

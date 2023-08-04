@@ -81,10 +81,10 @@ class SlashCommand {
         const rows = this.messageBuilder.buildReferenceButtons();
         if (reference.imageData.length > 0) {
             const attachementBuilder = this.messageBuilder.buildImageAttachment(reference.imageData);
-            await interaction.followUp({ embeds: [embedBuilder], files: [attachementBuilder], components: [rows] });
+            await interaction.followUp({ embeds: [embedBuilder], files: [attachementBuilder], components: rows });
         }
         else {
-            await interaction.followUp({ embeds: [embedBuilder], components: [rows] });
+            await interaction.followUp({ embeds: [embedBuilder], components: rows });
         }
     }
     get data() {

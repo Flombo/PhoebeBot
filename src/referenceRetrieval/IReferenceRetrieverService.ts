@@ -21,6 +21,4 @@ export interface IReferenceRetrieverService {
 
     greyscale(reference: IReference): Promise<IReference>;
 
-    blackAndWhite(reference: IReference): Promise<IReference>;
-
 }

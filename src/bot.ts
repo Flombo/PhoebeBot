@@ -25,7 +25,7 @@ client.once(Events.ClientReady, c => {
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (interaction.isChatInputCommand()) {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: false });
 		const availableCommands: Map<string, IReferenceCommand> = commandBuilder.commands;
 		const hasCommand: boolean = availableCommands.has(interaction.commandName);
 
@@ -50,7 +50,7 @@ client.on(Events.InteractionCreate, async interaction => {
 			}
 		}
 	} else if (interaction.isButton()) {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: false });
 
 		const embeds: Array<Embed> = interaction.message.embeds;
 

@@ -3,10 +3,10 @@ import { IReference } from "../referenceRetrieval/IReference";
 
 export interface IMessageBuilder {
 
-    buildReferenceMessage(reference : IReference) : EmbedBuilder;
+    buildReferenceMessage(reference: IReference): EmbedBuilder;
 
     buildImageAttachment(buffer: Buffer): AttachmentBuilder;
 
-    buildReferenceButtons() : ActionRowBuilder<MessageActionRowComponentBuilder>;
+    buildReferenceButtons(): Array<ActionRowBuilder<MessageActionRowComponentBuilder>>;
 
 }

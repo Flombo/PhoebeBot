@@ -1,5 +1,5 @@
 {
-    "label" : "\uD83D\uDD04",
-    "customId" : "rotateCounterClockwiseEvent",
-    "style" : "danger"
+    "label": "\uD83D\uDD04",
+    "customId": "rotateCounterClockwiseEvent",
+    "style": 4
 }

@@ -11,72 +11,62 @@ export abstract class ReferenceRetrieverService implements IReferenceRetrieverSe
         throw new Error("Method not implemented. Used command: " + command);
     }
 
-    public async mirrorHorizontal(reference: IReference): Promise<IReference> {
-        if (reference.imageData.length > 0) {
-            reference.imageData = await sharp(reference.imageData).flop().toBuffer();
-        } else {
-            const image: Response = await fetch(reference.url);
-            const buffer: Buffer = Buffer.from(await image.arrayBuffer());
-            reference.imageData = await sharp(buffer).flop().toBuffer();
-        }
+    private async getBuffer(reference: IReference): Promise<Buffer> {
+        let buffer: Buffer = reference.imageData;
 
+        if (buffer.length == 0) {
+            const image: Response = await fetch(reference.url);
+            buffer = Buffer.from(await image.arrayBuffer());
+        }
+        return buffer;
+    }
+
+    public async mirrorHorizontal(reference: IReference): Promise<IReference> {
+        const buffer: Buffer = await this.getBuffer(reference);
+        reference.imageData = await sharp(buffer).flop().toBuffer();
         return reference;
     }
 
     public async mirrorVertical(reference: IReference): Promise<IReference> {
-        if (reference.imageData.length > 0) {
-            reference.imageData = await sharp(reference.imageData).flip().toBuffer();
-        } else {
-            const image: Response = await fetch(reference.url);
-            const buffer: Buffer = Buffer.from(await image.arrayBuffer());
-            reference.imageData = await sharp(buffer).flip().toBuffer();
-        }
-
+        const buffer: Buffer = await this.getBuffer(reference);
+        reference.imageData = await sharp(buffer).flip().toBuffer();
         return reference;
     }
 
     public async rotateClockwise(reference: IReference): Promise<IReference> {
-        if (reference.imageData.length > 0) {
-            reference.imageData = await sharp(reference.imageData).rotate(-this.angle).toBuffer();
-        } else {
-            const image: Response = await fetch(reference.url);
-            const buffer: Buffer = Buffer.from(await image.arrayBuffer());
-            reference.imageData = await sharp(buffer).rotate(-this.angle).toBuffer();
-        }
-
+        const buffer: Buffer = await this.getBuffer(reference);
+        reference.imageData = await sharp(buffer).rotate(-this.angle).toBuffer();
         return reference;
     }
 
     public async rotateCounterClockwise(reference: IReference): Promise<IReference> {
-        if (reference.imageData.length > 0) {
-            reference.imageData = await sharp(reference.imageData).rotate(this.angle).toBuffer();
-        } else {
-            const image: Response = await fetch(reference.url);
-            const buffer: Buffer = Buffer.from(await image.arrayBuffer());
-            reference.imageData = await sharp(buffer).rotate(this.angle).toBuffer();
-        }
-
+        const buffer: Buffer = await this.getBuffer(reference);
+        reference.imageData = await sharp(buffer).rotate(this.angle).toBuffer();
         return reference;
     }
 
-    public negate(reference: IReference): Promise<IReference> {
-        throw new Error("Method not implemented. ref: " + reference);
+    public async negate(reference: IReference): Promise<IReference> {
+        const buffer: Buffer = await this.getBuffer(reference);
+        reference.imageData = await sharp(buffer).rotate(this.angle).toBuffer();
+        return reference;
     }
 
-    public blur(reference: IReference): Promise<IReference> {
-        throw new Error("Method not implemented. ref: " + reference);
+    public async blur(reference: IReference): Promise<IReference> {
+        const buffer: Buffer = await this.getBuffer(reference);
+        reference.imageData = await sharp(buffer).blur().toBuffer();
+        return reference;
     }
 
-    public sharpen(reference: IReference): Promise<IReference> {
-        throw new Error("Method not implemented. ref: " + reference);
+    public async sharpen(reference: IReference): Promise<IReference> {
+        const buffer: Buffer = await this.getBuffer(reference);
+        reference.imageData = await sharp(buffer).sharpen().toBuffer();
+        return reference;
     }
 
-    public greyscale(reference: IReference): Promise<IReference> {
-        throw new Error("Method not implemented. ref: " + reference);
-    }
-
-    public blackAndWhite(reference: IReference): Promise<IReference> {
-        throw new Error("Method not implemented. ref: " + reference);
+    public async greyscale(reference: IReference): Promise<IReference> {
+        const buffer: Buffer = await this.getBuffer(reference);
+        reference.imageData = await sharp(buffer).grayscale().toBuffer();
+        return reference;
     }
 
 }

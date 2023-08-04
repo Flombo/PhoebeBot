@@ -1,5 +1,5 @@
 {
     "label": "↔️",
     "customId": "mirrorHorizontalEvent",
-    "style": "primary"
+    "style": 1
 }

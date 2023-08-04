@@ -23,27 +23,36 @@ export abstract class MessageBuilder implements IMessageBuilder {
         return attachementBuilder;
     }
 
-    public buildReferenceButtons(): ActionRowBuilder<MessageActionRowComponentBuilder> {
-        const actionRowBuilder: ActionRowBuilder<MessageActionRowComponentBuilder> = new ActionRowBuilder();
+    public buildReferenceButtons(): Array<ActionRowBuilder<MessageActionRowComponentBuilder>> {
+        const rows: Array<ActionRowBuilder<MessageActionRowComponentBuilder>> = new Array();
+        let actionRowBuilder: ActionRowBuilder<MessageActionRowComponentBuilder> = new ActionRowBuilder();
+        rows.push(actionRowBuilder);
 
         try {
             this.componentFilesHelper.findJSONComponentFiles(path.join(__dirname, 'referenceButtons/referenceButtonJSON'));
-
             const referenceButtonsFiles: Array<string> = this.componentFilesHelper.componentFiles;
-
+            let buttonCount = 1;
             referenceButtonsFiles.forEach(referenceButtonFile => {
+
+                if (buttonCount == 5) {
+                    actionRowBuilder = new ActionRowBuilder();
+                    rows.push(actionRowBuilder);
+                    buttonCount = 1;
+                }
+
                 const referenceButton: IReferenceButton = Object.assign(new ReferenceButton(), require(referenceButtonFile));
                 const buttonBuilder: ButtonBuilder = new ButtonBuilder();
                 buttonBuilder.setCustomId(referenceButton.customId);
                 buttonBuilder.setLabel(referenceButton.label);
                 buttonBuilder.setStyle(referenceButton.style);
                 actionRowBuilder.addComponents(buttonBuilder);
+                buttonCount++;
 
             });
         } catch (error: any) {
             console.log(error);
         }
-        return actionRowBuilder;
+        return rows;
     }
 
 }

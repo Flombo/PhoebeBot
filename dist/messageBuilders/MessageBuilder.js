@@ -19,23 +19,32 @@ class MessageBuilder {
         return attachementBuilder;
     }
     buildReferenceButtons() {
-        const actionRowBuilder = new discord_js_1.ActionRowBuilder();
+        const rows = new Array();
+        let actionRowBuilder = new discord_js_1.ActionRowBuilder();
+        rows.push(actionRowBuilder);
         try {
             this.componentFilesHelper.findJSONComponentFiles(path_1.default.join(__dirname, 'referenceButtons/referenceButtonJSON'));
             const referenceButtonsFiles = this.componentFilesHelper.componentFiles;
+            let buttonCount = 1;
             referenceButtonsFiles.forEach(referenceButtonFile => {
+                if (buttonCount == 5) {
+                    actionRowBuilder = new discord_js_1.ActionRowBuilder();
+                    rows.push(actionRowBuilder);
+                    buttonCount = 1;
+                }
                 const referenceButton = Object.assign(new ReferenceButton_1.ReferenceButton(), require(referenceButtonFile));
                 const buttonBuilder = new discord_js_1.ButtonBuilder();
                 buttonBuilder.setCustomId(referenceButton.customId);
                 buttonBuilder.setLabel(referenceButton.label);
                 buttonBuilder.setStyle(referenceButton.style);
                 actionRowBuilder.addComponents(buttonBuilder);
+                buttonCount++;
             });
         }
         catch (error) {
             console.log(error);
         }
-        return actionRowBuilder;
+        return rows;
     }
 }
 exports.MessageBuilder = MessageBuilder;

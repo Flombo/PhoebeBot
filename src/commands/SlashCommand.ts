@@ -104,13 +104,13 @@ export abstract class SlashCommand implements IReferenceCommand {
 
     private async sendReply(interaction: MessageComponentInteraction | ChatInputCommandInteraction, reference: IReference): Promise<void> {
         const embedBuilder: EmbedBuilder = this.messageBuilder.buildReferenceMessage(reference);
-        const rows: ActionRowBuilder<MessageActionRowComponentBuilder> = this.messageBuilder.buildReferenceButtons();
+        const rows: Array<ActionRowBuilder<MessageActionRowComponentBuilder>> = this.messageBuilder.buildReferenceButtons();
 
         if (reference.imageData.length > 0) {
             const attachementBuilder: AttachmentBuilder = this.messageBuilder.buildImageAttachment(reference.imageData);
-            await interaction.followUp({ embeds: [embedBuilder], files: [attachementBuilder], components: [rows] });
+            await interaction.followUp({ embeds: [embedBuilder], files: [attachementBuilder], components: rows });
         } else {
-            await interaction.followUp({ embeds: [embedBuilder], components: [rows] });
+            await interaction.followUp({ embeds: [embedBuilder], components: rows });
         }
     }
 
