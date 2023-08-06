@@ -5,7 +5,9 @@ export interface IMessageBuilder {
 
     buildReferenceMessage(reference: IReference): EmbedBuilder;
 
-    buildImageAttachment(buffer: Buffer): AttachmentBuilder;
+    buildTransformedReferenceMessage(reference: IReference, attachmentName: string): EmbedBuilder;
+
+    buildTransformedReferenceAttachment(buffer: Buffer): AttachmentBuilder;
 
     buildReferenceButtons(): Array<ActionRowBuilder<MessageActionRowComponentBuilder>>;
 

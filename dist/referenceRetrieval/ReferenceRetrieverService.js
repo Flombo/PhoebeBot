@@ -38,7 +38,7 @@ class ReferenceRetrieverService {
     }
     async negate(reference) {
         const buffer = await this.getBuffer(reference);
-        reference.imageData = await (0, sharp_1.default)(buffer).rotate(this.angle).toBuffer();
+        reference.imageData = await (0, sharp_1.default)(buffer).negate().toBuffer();
         return reference;
     }
     async blur(reference) {

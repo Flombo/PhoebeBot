@@ -47,7 +47,7 @@ export abstract class ReferenceRetrieverService implements IReferenceRetrieverSe
 
     public async negate(reference: IReference): Promise<IReference> {
         const buffer: Buffer = await this.getBuffer(reference);
-        reference.imageData = await sharp(buffer).rotate(this.angle).toBuffer();
+        reference.imageData = await sharp(buffer).negate().toBuffer();
         return reference;
     }
 

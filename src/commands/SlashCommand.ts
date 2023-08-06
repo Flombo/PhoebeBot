@@ -76,6 +76,26 @@ export abstract class SlashCommand implements IReferenceCommand {
         await this.sendReply(interaction, transformedReference);
     }
 
+    public async sharpen(reference: IReference, interaction: ButtonInteraction<CacheType>): Promise<void> {
+        const transformedReference: IReference = await this.referenceService.sharpen(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+
+    public async blur(reference: IReference, interaction: ButtonInteraction<CacheType>): Promise<void> {
+        const transformedReference: IReference = await this.referenceService.blur(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+
+    public async greyscale(reference: IReference, interaction: ButtonInteraction<CacheType>): Promise<void> {
+        const transformedReference: IReference = await this.referenceService.greyscale(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+
+    public async negate(reference: IReference, interaction: ButtonInteraction<CacheType>): Promise<void> {
+        const transformedReference: IReference = await this.referenceService.negate(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+
     /**
      * Adds data to the SlashCommandBuilder like description, options and name.
      */
@@ -107,8 +127,10 @@ export abstract class SlashCommand implements IReferenceCommand {
         const rows: Array<ActionRowBuilder<MessageActionRowComponentBuilder>> = this.messageBuilder.buildReferenceButtons();
 
         if (reference.imageData.length > 0) {
-            const attachementBuilder: AttachmentBuilder = this.messageBuilder.buildImageAttachment(reference.imageData);
-            await interaction.followUp({ embeds: [embedBuilder], files: [attachementBuilder], components: rows });
+            const attachementBuilder: AttachmentBuilder = this.messageBuilder.buildTransformedReferenceAttachment(reference.imageData);
+            const attachmentName: string = attachementBuilder.name !== null ? attachementBuilder.name : '';
+            const transformedReferenceEmbedBuilder: EmbedBuilder = this.messageBuilder.buildTransformedReferenceMessage(reference, attachmentName);
+            await interaction.followUp({ embeds: [embedBuilder, transformedReferenceEmbedBuilder], files: [attachementBuilder], components: rows });
         } else {
             await interaction.followUp({ embeds: [embedBuilder], components: rows });
         }

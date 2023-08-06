@@ -58,6 +58,22 @@ class SlashCommand {
         const transformedReference = await this.referenceService.rotateCounterClockwise(reference);
         await this.sendReply(interaction, transformedReference);
     }
+    async sharpen(reference, interaction) {
+        const transformedReference = await this.referenceService.sharpen(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+    async blur(reference, interaction) {
+        const transformedReference = await this.referenceService.blur(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+    async greyscale(reference, interaction) {
+        const transformedReference = await this.referenceService.greyscale(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+    async negate(reference, interaction) {
+        const transformedReference = await this.referenceService.negate(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
     initSlashCommand() {
         this._data.setName(this.name)
             .setDescription(this.description);
@@ -80,8 +96,10 @@ class SlashCommand {
         const embedBuilder = this.messageBuilder.buildReferenceMessage(reference);
         const rows = this.messageBuilder.buildReferenceButtons();
         if (reference.imageData.length > 0) {
-            const attachementBuilder = this.messageBuilder.buildImageAttachment(reference.imageData);
-            await interaction.followUp({ embeds: [embedBuilder], files: [attachementBuilder], components: rows });
+            const attachementBuilder = this.messageBuilder.buildTransformedReferenceAttachment(reference.imageData);
+            const attachmentName = attachementBuilder.name !== null ? attachementBuilder.name : '';
+            const transformedReferenceEmbedBuilder = this.messageBuilder.buildTransformedReferenceMessage(reference, attachmentName);
+            await interaction.followUp({ embeds: [embedBuilder, transformedReferenceEmbedBuilder], files: [attachementBuilder], components: rows });
         }
         else {
             await interaction.followUp({ embeds: [embedBuilder], components: rows });

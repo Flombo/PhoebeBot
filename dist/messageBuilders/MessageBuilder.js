@@ -14,9 +14,16 @@ class MessageBuilder {
     buildReferenceMessage(reference) {
         throw new Error("Method not implemented. Retrieved reference: " + reference);
     }
-    buildImageAttachment(buffer) {
-        const attachementBuilder = new discord_js_1.AttachmentBuilder(buffer);
+    buildTransformedReferenceAttachment(buffer) {
+        const attachmentData = {
+            name: Math.random().toString(20).substring(2, 6) + '.png',
+            description: 'transformed reference'
+        };
+        const attachementBuilder = new discord_js_1.AttachmentBuilder(buffer, attachmentData);
         return attachementBuilder;
+    }
+    buildTransformedReferenceMessage(reference, attachmentName) {
+        throw new Error("Method not implemented." + reference + attachmentName);
     }
     buildReferenceButtons() {
         const rows = new Array();

@@ -1,4 +1,4 @@
-import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, EmbedBuilder, MessageActionRowComponentBuilder } from "discord.js";
+import { ActionRowBuilder, AttachmentBuilder, AttachmentData, ButtonBuilder, EmbedBuilder, MessageActionRowComponentBuilder } from "discord.js";
 import path from "path";
 import { ComponentFilesHelper } from "../ComponentFilesHelper";
 import { IReference } from "../referenceRetrieval/IReference";
@@ -18,9 +18,17 @@ export abstract class MessageBuilder implements IMessageBuilder {
         throw new Error("Method not implemented. Retrieved reference: " + reference);
     }
 
-    public buildImageAttachment(buffer: Buffer): AttachmentBuilder {
-        const attachementBuilder: AttachmentBuilder = new AttachmentBuilder(buffer);
+    public buildTransformedReferenceAttachment(buffer: Buffer): AttachmentBuilder {
+        const attachmentData: AttachmentData = {
+            name: 'reference.png',
+            description: 'transformed reference'
+        };
+        const attachementBuilder: AttachmentBuilder = new AttachmentBuilder(buffer, attachmentData);
         return attachementBuilder;
+    }
+
+    public buildTransformedReferenceMessage(reference: IReference, attachmentName: string): EmbedBuilder {
+        throw new Error("Method not implemented." + reference + attachmentName);
     }
 
     public buildReferenceButtons(): Array<ActionRowBuilder<MessageActionRowComponentBuilder>> {
