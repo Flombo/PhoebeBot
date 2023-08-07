@@ -60,6 +60,12 @@ export class ButtonEventHandler implements IDiscordEventHandler {
             case ReferenceButtonIds[ReferenceButtonIds.greyscaleEvent]:
                 await defaultCommand.greyscale(reference, interaction);
                 break;
+            case ReferenceButtonIds[ReferenceButtonIds.normalizeEvent]:
+                await defaultCommand.normalize(reference, interaction);
+                break;
+            case ReferenceButtonIds[ReferenceButtonIds.medianEvent]:
+                await defaultCommand.median(reference, interaction);
+                break;
         }
     }
 

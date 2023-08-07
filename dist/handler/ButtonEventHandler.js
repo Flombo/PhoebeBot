@@ -49,6 +49,12 @@ class ButtonEventHandler {
             case ReferenceButtonIds_1.ReferenceButtonIds[ReferenceButtonIds_1.ReferenceButtonIds.greyscaleEvent]:
                 await defaultCommand.greyscale(reference, interaction);
                 break;
+            case ReferenceButtonIds_1.ReferenceButtonIds[ReferenceButtonIds_1.ReferenceButtonIds.normalizeEvent]:
+                await defaultCommand.normalize(reference, interaction);
+                break;
+            case ReferenceButtonIds_1.ReferenceButtonIds[ReferenceButtonIds_1.ReferenceButtonIds.medianEvent]:
+                await defaultCommand.median(reference, interaction);
+                break;
         }
     }
 }

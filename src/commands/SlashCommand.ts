@@ -96,6 +96,16 @@ export abstract class SlashCommand implements IReferenceCommand {
         await this.sendReply(interaction, transformedReference);
     }
 
+    public async normalize(reference: IReference, interaction: ButtonInteraction<CacheType>): Promise<void> {
+        const transformedReference: IReference = await this.referenceService.normalize(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+
+    public async median(reference: IReference, interaction: ButtonInteraction<CacheType>): Promise<void> {
+        const transformedReference: IReference = await this.referenceService.median(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+
     /**
      * Adds data to the SlashCommandBuilder like description, options and name.
      */

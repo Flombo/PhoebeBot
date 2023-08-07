@@ -23,7 +23,7 @@ export class QuickPoseReferenceRetrieverService extends ReferenceRetrieverServic
 
         if (!this.alreadyInstantiatedBrowser || this.page.isClosed()) {
             this.browser = await puppeteer.launch({
-                headless: true,
+                headless: "new",
                 args: [
                     "--disable-gpu",
                     "--disable-dev-shm-usage",

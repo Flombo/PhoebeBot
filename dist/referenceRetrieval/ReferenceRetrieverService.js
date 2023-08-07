@@ -43,17 +43,27 @@ class ReferenceRetrieverService {
     }
     async blur(reference) {
         const buffer = await this.getBuffer(reference);
-        reference.imageData = await (0, sharp_1.default)(buffer).blur().toBuffer();
+        reference.imageData = await (0, sharp_1.default)(buffer).blur(1).toBuffer();
         return reference;
     }
     async sharpen(reference) {
         const buffer = await this.getBuffer(reference);
-        reference.imageData = await (0, sharp_1.default)(buffer).sharpen().toBuffer();
+        reference.imageData = await (0, sharp_1.default)(buffer).sharpen({ sigma: 2 }).toBuffer();
         return reference;
     }
     async greyscale(reference) {
         const buffer = await this.getBuffer(reference);
         reference.imageData = await (0, sharp_1.default)(buffer).grayscale().toBuffer();
+        return reference;
+    }
+    async normalize(reference) {
+        const buffer = await this.getBuffer(reference);
+        reference.imageData = await (0, sharp_1.default)(buffer).normalize().toBuffer();
+        return reference;
+    }
+    async median(reference) {
+        const buffer = await this.getBuffer(reference);
+        reference.imageData = await (0, sharp_1.default)(buffer).median().toBuffer();
         return reference;
     }
 }

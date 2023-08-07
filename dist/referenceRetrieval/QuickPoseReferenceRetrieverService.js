@@ -18,7 +18,7 @@ class QuickPoseReferenceRetrieverService extends ReferenceRetrieverService_1.Ref
     async getReference(command) {
         if (!this.alreadyInstantiatedBrowser || this.page.isClosed()) {
             this.browser = await puppeteer_1.default.launch({
-                headless: true,
+                headless: "new",
                 args: [
                     "--disable-gpu",
                     "--disable-dev-shm-usage",

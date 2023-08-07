@@ -11,5 +11,7 @@ var ReferenceButtonIds;
     ReferenceButtonIds[ReferenceButtonIds["sharpenEvent"] = 5] = "sharpenEvent";
     ReferenceButtonIds[ReferenceButtonIds["greyscaleEvent"] = 6] = "greyscaleEvent";
     ReferenceButtonIds[ReferenceButtonIds["blurEvent"] = 7] = "blurEvent";
+    ReferenceButtonIds[ReferenceButtonIds["medianEvent"] = 8] = "medianEvent";
+    ReferenceButtonIds[ReferenceButtonIds["normalizeEvent"] = 9] = "normalizeEvent";
 })(ReferenceButtonIds = exports.ReferenceButtonIds || (exports.ReferenceButtonIds = {}));
 //# sourceMappingURL=ReferenceButtonIds.js.map

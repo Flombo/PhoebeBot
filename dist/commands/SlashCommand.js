@@ -74,6 +74,14 @@ class SlashCommand {
         const transformedReference = await this.referenceService.negate(reference);
         await this.sendReply(interaction, transformedReference);
     }
+    async normalize(reference, interaction) {
+        const transformedReference = await this.referenceService.normalize(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
+    async median(reference, interaction) {
+        const transformedReference = await this.referenceService.median(reference);
+        await this.sendReply(interaction, transformedReference);
+    }
     initSlashCommand() {
         this._data.setName(this.name)
             .setDescription(this.description);

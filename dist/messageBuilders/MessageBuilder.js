@@ -16,7 +16,7 @@ class MessageBuilder {
     }
     buildTransformedReferenceAttachment(buffer) {
         const attachmentData = {
-            name: Math.random().toString(20).substring(2, 6) + '.png',
+            name: 'reference.png',
             description: 'transformed reference'
         };
         const attachementBuilder = new discord_js_1.AttachmentBuilder(buffer, attachmentData);

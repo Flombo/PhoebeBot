@@ -19,8 +19,8 @@ export class CommandRegistry {
         try {
             commands.forEach((value: IReferenceCommand) => commandDataJSON.push(value.data.toJSON()));
             const rest: REST = new REST();
-            rest.setToken(token),
-                console.log(`Started refreshing ${commandDataJSON.length} application (/) commands.`);
+            rest.setToken(token);
+            console.log(`Started refreshing ${commandDataJSON.length} application (/) commands.`);
             await rest.put(
                 Routes.applicationCommands(clientId),
                 { body: commandDataJSON }

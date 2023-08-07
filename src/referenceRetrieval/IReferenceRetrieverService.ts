@@ -21,4 +21,8 @@ export interface IReferenceRetrieverService {
 
     greyscale(reference: IReference): Promise<IReference>;
 
+    normalize(reference: IReference): Promise<IReference>;
+
+    median(reference: IReference): Promise<IReference>;
+
 }

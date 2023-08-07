@@ -11,8 +11,8 @@ class CommandRegistry {
         try {
             commands.forEach((value) => commandDataJSON.push(value.data.toJSON()));
             const rest = new discord_js_1.REST();
-            rest.setToken(token),
-                console.log(`Started refreshing ${commandDataJSON.length} application (/) commands.`);
+            rest.setToken(token);
+            console.log(`Started refreshing ${commandDataJSON.length} application (/) commands.`);
             await rest.put(discord_js_1.Routes.applicationCommands(clientId), { body: commandDataJSON });
             console.log(`Successfully reloaded ${commandDataJSON.length} application (/) commands.`);
         }

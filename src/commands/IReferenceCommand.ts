@@ -19,6 +19,18 @@ export interface IReferenceCommand {
 
     rotateCounterClockwise(reference: IReference, interaction: ButtonInteraction): Promise<void>;
 
+    sharpen(reference: IReference, interaction: ButtonInteraction): Promise<void>;
+
+    blur(reference: IReference, interaction: ButtonInteraction): Promise<void>;
+
+    greyscale(reference: IReference, interaction: ButtonInteraction): Promise<void>;
+
+    negate(reference: IReference, interaction: ButtonInteraction): Promise<void>;
+
+    normalize(reference: IReference, interaction: ButtonInteraction): Promise<void>;
+
+    median(reference: IReference, interaction: ButtonInteraction): Promise<void>;
+
     get options(): Array<CommandOptionChoice>;
 
     set options(value: Array<CommandOptionChoice>);
