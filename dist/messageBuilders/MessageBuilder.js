@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MessageBuilder = void 0;
+exports.ReferenceMessageBuilder = void 0;
 const tslib_1 = require("tslib");
 const discord_js_1 = require("discord.js");
 const path_1 = tslib_1.__importDefault(require("path"));
 const ComponentFilesHelper_1 = require("../ComponentFilesHelper");
 const ReferenceButton_1 = require("./referenceButtons/ReferenceButton");
-class MessageBuilder {
+class ReferenceMessageBuilder {
     componentFilesHelper;
     constructor() {
         this.componentFilesHelper = new ComponentFilesHelper_1.ComponentFilesHelper();
@@ -54,5 +54,5 @@ class MessageBuilder {
         return rows;
     }
 }
-exports.MessageBuilder = MessageBuilder;
+exports.ReferenceMessageBuilder = ReferenceMessageBuilder;
 //# sourceMappingURL=MessageBuilder.js.map

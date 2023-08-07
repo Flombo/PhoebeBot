@@ -2,11 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultCommand = void 0;
 const CommandType_1 = require("../CommandType");
-const SlashCommand_1 = require("../SlashCommand");
-const PoseCommandType_1 = require("./PoseCommandType");
-class DefaultCommand extends SlashCommand_1.SlashCommand {
+const ReferenceCommand_1 = require("../ReferenceCommand");
+class DefaultCommand extends ReferenceCommand_1.ReferenceCommand {
     constructor() {
-        super("", "", PoseCommandType_1.PoseCommandType.default, new Array(), CommandType_1.CommandType.DefaultCommand);
+        super("", "", new Array(), CommandType_1.CommandType.DefaultCommand);
     }
 }
 exports.DefaultCommand = DefaultCommand;

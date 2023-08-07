@@ -2,11 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PoseCommand = void 0;
 const CommandType_1 = require("../CommandType");
-const SlashCommand_1 = require("../SlashCommand");
-const PoseCommandType_1 = require("./PoseCommandType");
-class PoseCommand extends SlashCommand_1.SlashCommand {
+const ReferenceCommand_1 = require("../ReferenceCommand");
+class PoseCommand extends ReferenceCommand_1.ReferenceCommand {
     constructor(name, description, options) {
-        super(name, description, PoseCommandType_1.PoseCommandType.pose, options, CommandType_1.CommandType.Quickpose);
+        super(name, description, options, CommandType_1.CommandType.Quickpose);
     }
 }
 exports.PoseCommand = PoseCommand;

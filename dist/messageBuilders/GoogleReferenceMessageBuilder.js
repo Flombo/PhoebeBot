@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GoogleReferenceMessageBuilder = void 0;
-const MessageBuilder_1 = require("./MessageBuilder");
-class GoogleReferenceMessageBuilder extends MessageBuilder_1.MessageBuilder {
+const ReferenceMessageBuilder_1 = require("./ReferenceMessageBuilder");
+class GoogleReferenceMessageBuilder extends ReferenceMessageBuilder_1.ReferenceMessageBuilder {
 }
 exports.GoogleReferenceMessageBuilder = GoogleReferenceMessageBuilder;
 //# sourceMappingURL=GoogleReferenceMessageBuilder.js.map

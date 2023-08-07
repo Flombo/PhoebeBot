@@ -1,5 +1,5 @@
-import { MessageBuilder } from "./MessageBuilder";
+import { ReferenceMessageBuilder } from "./ReferenceMessageBuilder";
 
-export class GoogleReferenceMessageBuilder extends MessageBuilder {
+export class GoogleReferenceMessageBuilder extends ReferenceMessageBuilder {
 
 }

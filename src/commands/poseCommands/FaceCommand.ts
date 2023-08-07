@@ -1,12 +1,11 @@
 import { CommandOptionChoice } from "../CommandOptionChoice";
 import { CommandType } from "../CommandType";
-import { SlashCommand } from "../SlashCommand";
-import { PoseCommandType } from "./PoseCommandType";
+import { ReferenceCommand } from "../ReferenceCommand";
 
-export class FaceCommand extends SlashCommand {
+export class FaceCommand extends ReferenceCommand {
 
-    constructor(name : string, description : string, choices : Array<CommandOptionChoice>) {
-        super(name, description, PoseCommandType.face, choices, CommandType.Quickpose);
+    constructor(name: string, description: string, choices: Array<CommandOptionChoice>) {
+        super(name, description, choices, CommandType.Quickpose);
     }
 
 }

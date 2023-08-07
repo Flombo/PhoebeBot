@@ -1,12 +1,11 @@
 import { CommandOptionChoice } from "../CommandOptionChoice";
 import { CommandType } from "../CommandType";
-import { SlashCommand } from "../SlashCommand";
-import { PoseCommandType } from "./PoseCommandType";
+import { ReferenceCommand } from "../ReferenceCommand";
 
-export class DefaultCommand extends SlashCommand {
+export class DefaultCommand extends ReferenceCommand {
 
     constructor() {
-        super("","", PoseCommandType.default, new Array<CommandOptionChoice>(), CommandType.DefaultCommand);
+        super("", "", new Array<CommandOptionChoice>(), CommandType.DefaultCommand);
     }
 
 }

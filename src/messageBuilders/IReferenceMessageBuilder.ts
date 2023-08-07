@@ -1,7 +1,7 @@
 import { ActionRowBuilder, AttachmentBuilder, EmbedBuilder, MessageActionRowComponentBuilder } from "discord.js";
 import { IReference } from "../referenceRetrieval/IReference";
 
-export interface IMessageBuilder {
+export interface IReferenceMessageBuilder {
 
     buildReferenceMessage(reference: IReference): EmbedBuilder;
 

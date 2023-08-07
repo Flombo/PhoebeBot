@@ -1,3 +1,3 @@
 export enum CommandType {
-    Quickpose, DeviantArt, Google, DefaultCommand
+    Quickpose, DeviantArt, Google, DefaultCommand, HelpCommand
 }

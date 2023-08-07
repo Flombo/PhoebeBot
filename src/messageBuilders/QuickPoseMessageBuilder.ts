@@ -1,8 +1,8 @@
 import { EmbedBuilder } from "discord.js";
 import { IReference } from "../referenceRetrieval/IReference";
-import { MessageBuilder } from "./MessageBuilder";
+import { ReferenceMessageBuilder } from "./ReferenceMessageBuilder";
 
-export class QuickPoseMessageBuilder extends MessageBuilder {
+export class QuickPoseMessageBuilder extends ReferenceMessageBuilder {
 
     public buildTransformedReferenceMessage(reference: IReference, attachmentName: string): EmbedBuilder {
         const embedBuilder: EmbedBuilder = new EmbedBuilder();

@@ -1,5 +1,5 @@
-import { MessageBuilder } from "./MessageBuilder";
+import { ReferenceMessageBuilder } from "./ReferenceMessageBuilder";
 
-export class DeviantArtReferenceMessageBuilder extends MessageBuilder {
+export class DeviantArtReferenceMessageBuilder extends ReferenceMessageBuilder {
 
 }

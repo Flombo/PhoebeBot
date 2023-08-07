@@ -1,15 +1,8 @@
-import { ButtonInteraction, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-
+import { ButtonInteraction } from "discord.js";
 import { IReference } from "../referenceRetrieval/IReference";
-import { Choice } from "./Choice";
-import { CommandOptionChoice } from "./CommandOptionChoice";
-import { PoseCommandType } from "./poseCommands/PoseCommandType";
+import { ICommand } from "./ICommand";
 
-export interface IReferenceCommand {
-
-    initSlashCommand(): void;
-
-    execute(interaction: ChatInputCommandInteraction): Promise<void>;
+export interface IReferenceCommand extends ICommand {
 
     mirrorHorizontal(reference: IReference, interaction: ButtonInteraction): Promise<void>;
 
@@ -30,25 +23,5 @@ export interface IReferenceCommand {
     normalize(reference: IReference, interaction: ButtonInteraction): Promise<void>;
 
     median(reference: IReference, interaction: ButtonInteraction): Promise<void>;
-
-    get options(): Array<CommandOptionChoice>;
-
-    set options(value: Array<CommandOptionChoice>);
-
-    get type(): PoseCommandType;
-
-    set type(value: PoseCommandType);
-
-    get description(): string;
-
-    set description(value: string);
-
-    get name(): string;
-
-    set name(value: string);
-
-    get data(): SlashCommandBuilder;
-
-    getSelectedChoices(): Array<Choice>;
 
 }

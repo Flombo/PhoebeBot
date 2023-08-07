@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeviantArtReferenceMessageBuilder = void 0;
-const MessageBuilder_1 = require("./MessageBuilder");
-class DeviantArtReferenceMessageBuilder extends MessageBuilder_1.MessageBuilder {
+const ReferenceMessageBuilder_1 = require("./ReferenceMessageBuilder");
+class DeviantArtReferenceMessageBuilder extends ReferenceMessageBuilder_1.ReferenceMessageBuilder {
 }
 exports.DeviantArtReferenceMessageBuilder = DeviantArtReferenceMessageBuilder;
 //# sourceMappingURL=DeviantArtReferenceMessageBuilder.js.map

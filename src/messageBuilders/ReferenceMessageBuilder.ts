@@ -2,11 +2,11 @@ import { ActionRowBuilder, AttachmentBuilder, AttachmentData, ButtonBuilder, Emb
 import path from "path";
 import { ComponentFilesHelper } from "../ComponentFilesHelper";
 import { IReference } from "../referenceRetrieval/IReference";
-import { IMessageBuilder } from "./IMessageBuilder";
+import { IReferenceMessageBuilder } from "./IReferenceMessageBuilder";
 import { IReferenceButton } from "./referenceButtons/IReferenceButton";
 import { ReferenceButton } from "./referenceButtons/ReferenceButton";
 
-export abstract class MessageBuilder implements IMessageBuilder {
+export abstract class ReferenceMessageBuilder implements IReferenceMessageBuilder {
 
     private componentFilesHelper: ComponentFilesHelper;
 

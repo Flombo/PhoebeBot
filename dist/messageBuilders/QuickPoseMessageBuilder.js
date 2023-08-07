@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuickPoseMessageBuilder = void 0;
 const discord_js_1 = require("discord.js");
-const MessageBuilder_1 = require("./MessageBuilder");
-class QuickPoseMessageBuilder extends MessageBuilder_1.MessageBuilder {
+const ReferenceMessageBuilder_1 = require("./ReferenceMessageBuilder");
+class QuickPoseMessageBuilder extends ReferenceMessageBuilder_1.ReferenceMessageBuilder {
     buildTransformedReferenceMessage(reference, attachmentName) {
         const embedBuilder = new discord_js_1.EmbedBuilder();
         embedBuilder.setColor(0x0099FF)
