@@ -9,6 +9,6 @@ export interface IReferenceMessageBuilder {
 
     buildTransformedReferenceAttachment(buffer: Buffer): AttachmentBuilder;
 
-    buildReferenceButtons(): Array<ActionRowBuilder<MessageActionRowComponentBuilder>>;
+    buildReferenceButtons(referenceButtonsFiles: Array<string>): Array<ActionRowBuilder<MessageActionRowComponentBuilder>>;
 
 }

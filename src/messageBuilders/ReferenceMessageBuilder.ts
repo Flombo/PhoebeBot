@@ -1,18 +1,10 @@
 import { ActionRowBuilder, AttachmentBuilder, AttachmentData, ButtonBuilder, EmbedBuilder, MessageActionRowComponentBuilder } from "discord.js";
-import path from "path";
-import { ComponentFilesHelper } from "../ComponentFilesHelper";
+import { IReferenceButton } from "../referenceButtons/IReferenceButton";
+import { ReferenceButton } from "../referenceButtons/ReferenceButton";
 import { IReference } from "../referenceRetrieval/IReference";
 import { IReferenceMessageBuilder } from "./IReferenceMessageBuilder";
-import { IReferenceButton } from "./referenceButtons/IReferenceButton";
-import { ReferenceButton } from "./referenceButtons/ReferenceButton";
 
 export abstract class ReferenceMessageBuilder implements IReferenceMessageBuilder {
-
-    private componentFilesHelper: ComponentFilesHelper;
-
-    constructor() {
-        this.componentFilesHelper = new ComponentFilesHelper();
-    }
 
     buildReferenceMessage(reference: IReference): EmbedBuilder {
         throw new Error("Method not implemented. Retrieved reference: " + reference);
@@ -31,14 +23,12 @@ export abstract class ReferenceMessageBuilder implements IReferenceMessageBuilde
         throw new Error("Method not implemented." + reference + attachmentName);
     }
 
-    public buildReferenceButtons(): Array<ActionRowBuilder<MessageActionRowComponentBuilder>> {
+    public buildReferenceButtons(referenceButtonsFiles: Array<string>): Array<ActionRowBuilder<MessageActionRowComponentBuilder>> {
         const rows: Array<ActionRowBuilder<MessageActionRowComponentBuilder>> = new Array();
         let actionRowBuilder: ActionRowBuilder<MessageActionRowComponentBuilder> = new ActionRowBuilder();
         rows.push(actionRowBuilder);
 
         try {
-            this.componentFilesHelper.findJSONComponentFiles(path.join(__dirname, 'referenceButtons/referenceButtonJSON'));
-            const referenceButtonsFiles: Array<string> = this.componentFilesHelper.componentFiles;
             let buttonCount = 1;
             referenceButtonsFiles.forEach(referenceButtonFile => {
 

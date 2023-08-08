@@ -1,11 +1,17 @@
 import { ButtonInteraction, CacheType, Embed } from "discord.js";
 import { DefaultCommand } from "../commands/poseCommands/DefaultCommand";
-import { ReferenceButtonIds } from "../messageBuilders/referenceButtons/ReferenceButtonIds";
+import { ReferenceButtonIds } from "../referenceButtons/ReferenceButtonIds";
 import { IReference } from "../referenceRetrieval/IReference";
 import { QuickPoseReference } from "../referenceRetrieval/QuickPoseReference";
 import { IDiscordEventHandler } from "./IDiscordEventHandler";
 
 export class ButtonEventHandler implements IDiscordEventHandler {
+
+    private referenceButtonsFiles: Array<string>;
+
+    constructor(referenceButtonsFiles: Array<string>) {
+        this.referenceButtonsFiles = referenceButtonsFiles;
+    }
 
     public async handle(interaction: ButtonInteraction<CacheType>): Promise<void> {
         await interaction.deferReply({ ephemeral: false });
@@ -33,7 +39,7 @@ export class ButtonEventHandler implements IDiscordEventHandler {
     }
 
     private async transformReference(reference: IReference, interaction: ButtonInteraction<CacheType>): Promise<void> {
-        const defaultCommand: DefaultCommand = new DefaultCommand();
+        const defaultCommand: DefaultCommand = new DefaultCommand(this.referenceButtonsFiles);
 
         switch (interaction.customId) {
             case ReferenceButtonIds[ReferenceButtonIds.mirrorHorizontalEvent]:

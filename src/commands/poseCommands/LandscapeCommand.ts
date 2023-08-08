@@ -4,8 +4,8 @@ import { ReferenceCommand } from "../ReferenceCommand";
 
 export class LandscapeCommand extends ReferenceCommand {
 
-    constructor(name: string, description: string, options: Array<CommandOptionChoice>) {
-        super(name, description, options, CommandType.Quickpose);
+    constructor(name: string, description: string, options: Array<CommandOptionChoice>, referenceButtonsFiles: Array<string>) {
+        super(name, description, options, CommandType.Quickpose, referenceButtonsFiles);
     }
 
 }

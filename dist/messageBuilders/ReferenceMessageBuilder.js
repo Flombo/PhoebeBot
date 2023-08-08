@@ -1,16 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReferenceMessageBuilder = void 0;
-const tslib_1 = require("tslib");
 const discord_js_1 = require("discord.js");
-const path_1 = tslib_1.__importDefault(require("path"));
-const ComponentFilesHelper_1 = require("../ComponentFilesHelper");
-const ReferenceButton_1 = require("./referenceButtons/ReferenceButton");
+const ReferenceButton_1 = require("../referenceButtons/ReferenceButton");
 class ReferenceMessageBuilder {
-    componentFilesHelper;
-    constructor() {
-        this.componentFilesHelper = new ComponentFilesHelper_1.ComponentFilesHelper();
-    }
     buildReferenceMessage(reference) {
         throw new Error("Method not implemented. Retrieved reference: " + reference);
     }
@@ -25,13 +18,11 @@ class ReferenceMessageBuilder {
     buildTransformedReferenceMessage(reference, attachmentName) {
         throw new Error("Method not implemented." + reference + attachmentName);
     }
-    buildReferenceButtons() {
+    buildReferenceButtons(referenceButtonsFiles) {
         const rows = new Array();
         let actionRowBuilder = new discord_js_1.ActionRowBuilder();
         rows.push(actionRowBuilder);
         try {
-            this.componentFilesHelper.findJSONComponentFiles(path_1.default.join(__dirname, 'referenceButtons/referenceButtonJSON'));
-            const referenceButtonsFiles = this.componentFilesHelper.componentFiles;
             let buttonCount = 1;
             referenceButtonsFiles.forEach(referenceButtonFile => {
                 if (buttonCount == 5) {

@@ -17,10 +17,11 @@ export abstract class ReferenceCommand extends SlashCommand implements IReferenc
 
     private referenceService: IReferenceRetrieverService;
     private messageBuilder: IReferenceMessageBuilder;
+    private referenceButtonsFiles: Array<string>;
 
-    constructor(name: string, description: string, options: Array<CommandOptionChoice>, commandType: CommandType) {
+    constructor(name: string, description: string, options: Array<CommandOptionChoice>, commandType: CommandType, referenceButtonsFiles: Array<string>) {
         super(name, description, options);
-
+        this.referenceButtonsFiles = referenceButtonsFiles;
         switch (commandType) {
             case CommandType.Quickpose:
                 this.referenceService = new QuickPoseReferenceRetrieverService();
@@ -98,7 +99,7 @@ export abstract class ReferenceCommand extends SlashCommand implements IReferenc
 
     private async sendReply(interaction: MessageComponentInteraction | ChatInputCommandInteraction, reference: IReference): Promise<void> {
         const embedBuilder: EmbedBuilder = this.messageBuilder.buildReferenceMessage(reference);
-        const rows: Array<ActionRowBuilder<MessageActionRowComponentBuilder>> = this.messageBuilder.buildReferenceButtons();
+        const rows: Array<ActionRowBuilder<MessageActionRowComponentBuilder>> = this.messageBuilder.buildReferenceButtons(this.referenceButtonsFiles);
 
         if (reference.imageData.length > 0) {
             const attachementBuilder: AttachmentBuilder = this.messageBuilder.buildTransformedReferenceAttachment(reference.imageData);

@@ -12,8 +12,10 @@ const SlashCommand_1 = require("./SlashCommand");
 class ReferenceCommand extends SlashCommand_1.SlashCommand {
     referenceService;
     messageBuilder;
-    constructor(name, description, options, commandType) {
+    referenceButtonsFiles;
+    constructor(name, description, options, commandType, referenceButtonsFiles) {
         super(name, description, options);
+        this.referenceButtonsFiles = referenceButtonsFiles;
         switch (commandType) {
             case CommandType_1.CommandType.Quickpose:
                 this.referenceService = new QuickPoseReferenceRetrieverService_1.QuickPoseReferenceRetrieverService();
@@ -79,7 +81,7 @@ class ReferenceCommand extends SlashCommand_1.SlashCommand {
     }
     async sendReply(interaction, reference) {
         const embedBuilder = this.messageBuilder.buildReferenceMessage(reference);
-        const rows = this.messageBuilder.buildReferenceButtons();
+        const rows = this.messageBuilder.buildReferenceButtons(this.referenceButtonsFiles);
         if (reference.imageData.length > 0) {
             const attachementBuilder = this.messageBuilder.buildTransformedReferenceAttachment(reference.imageData);
             const attachmentName = attachementBuilder.name !== null ? attachementBuilder.name : '';

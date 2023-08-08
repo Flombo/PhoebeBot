@@ -19,43 +19,43 @@ export class CommandBuilder {
     /**
      * Builds all available slash commands from json files. 
      */
-    public buildCommands() {
+    public buildCommands(referenceButtonsFiles: Array<string>) {
         try {
             const componentFilesHelper: ComponentFilesHelper = new ComponentFilesHelper();
             componentFilesHelper.findJSONComponentFiles(this.commandsPath);
             const commandFiles: Array<string> = componentFilesHelper.componentFiles;
 
             commandFiles.forEach(commandFile => {
-                const command: IReferenceCommand = Object.assign(new DefaultCommand(), require(commandFile));
+                const command: IReferenceCommand = Object.assign(new DefaultCommand(new Array()), require(commandFile));
 
                 switch (command.name) {
                     case PoseCommandType[PoseCommandType.pose]:
-                        const poseCommand: PoseCommand = new PoseCommand(command.name, command.description, command.options);
+                        const poseCommand: PoseCommand = new PoseCommand(command.name, command.description, command.options, referenceButtonsFiles);
                         poseCommand.initSlashCommand();
                         this._commands.set(command.name, poseCommand);
                         break;
                     case PoseCommandType[PoseCommandType.animals]:
-                        const animalCommand: AnimalCommand = new AnimalCommand(command.name, command.description, command.options);
+                        const animalCommand: AnimalCommand = new AnimalCommand(command.name, command.description, command.options, referenceButtonsFiles);
                         animalCommand.initSlashCommand();
                         this._commands.set(command.name, animalCommand);
                         break;
                     case PoseCommandType[PoseCommandType.face]:
-                        const faceCommand: FaceCommand = new FaceCommand(command.name, command.description, command.options);
+                        const faceCommand: FaceCommand = new FaceCommand(command.name, command.description, command.options, referenceButtonsFiles);
                         faceCommand.initSlashCommand();
                         this._commands.set(command.name, faceCommand);
                         break;
                     case PoseCommandType[PoseCommandType.hands]:
-                        const handCommand: HandCommand = new HandCommand(command.name, command.description, command.options);
+                        const handCommand: HandCommand = new HandCommand(command.name, command.description, command.options, referenceButtonsFiles);
                         handCommand.initSlashCommand();
                         this._commands.set(command.name, handCommand);
                         break;
                     case PoseCommandType[PoseCommandType.urban]:
-                        const urbanCommand: UrbanCommand = new UrbanCommand(command.name, command.description, command.options);
+                        const urbanCommand: UrbanCommand = new UrbanCommand(command.name, command.description, command.options, referenceButtonsFiles);
                         urbanCommand.initSlashCommand();
                         this._commands.set(command.name, urbanCommand);
                         break;
                     case PoseCommandType[PoseCommandType.landscapes]:
-                        const landscapeCommand: LandscapeCommand = new LandscapeCommand(command.name, command.description, command.options);
+                        const landscapeCommand: LandscapeCommand = new LandscapeCommand(command.name, command.description, command.options, referenceButtonsFiles);
                         landscapeCommand.initSlashCommand();
                         this._commands.set(command.name, landscapeCommand);
                         break;

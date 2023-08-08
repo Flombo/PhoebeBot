@@ -2,9 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ButtonEventHandler = void 0;
 const DefaultCommand_1 = require("../commands/poseCommands/DefaultCommand");
-const ReferenceButtonIds_1 = require("../messageBuilders/referenceButtons/ReferenceButtonIds");
+const ReferenceButtonIds_1 = require("../referenceButtons/ReferenceButtonIds");
 const QuickPoseReference_1 = require("../referenceRetrieval/QuickPoseReference");
 class ButtonEventHandler {
+    referenceButtonsFiles;
+    constructor(referenceButtonsFiles) {
+        this.referenceButtonsFiles = referenceButtonsFiles;
+    }
     async handle(interaction) {
         await interaction.deferReply({ ephemeral: false });
         const embeds = interaction.message.embeds;
@@ -23,7 +27,7 @@ class ButtonEventHandler {
         await this.transformReference(reference, interaction);
     }
     async transformReference(reference, interaction) {
-        const defaultCommand = new DefaultCommand_1.DefaultCommand();
+        const defaultCommand = new DefaultCommand_1.DefaultCommand(this.referenceButtonsFiles);
         switch (interaction.customId) {
             case ReferenceButtonIds_1.ReferenceButtonIds[ReferenceButtonIds_1.ReferenceButtonIds.mirrorHorizontalEvent]:
                 await defaultCommand.mirrorHorizontal(reference, interaction);
