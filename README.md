@@ -24,15 +24,15 @@ Discord bot that let artists retrieve reference images in discord from https://q
           docker build .
 - Features:
 
-  - Pose reference retrieval from https://quickposes.com with further information like owner and url of the reference
+  - Pose reference retrieval from https://quickposes.com with further information like the owner of the image, the image url and the width and height
   - Image transformation:
     - Under every reference image there are multiple rows of clickable transformation buttons:
       
       Transformation buttons:
       ![Reference buttons](readmeImages/ReferenceButtons.PNG "Reference buttons")
     
-    Original reference:
-    ![Original reference image](readmeImages/Original.PNG "Original reference image")
+      Original reference:
+      ![Original reference image](readmeImages/Original.PNG "Original reference image")
     
     - Rotation (clockwise (:arrows_clockwise: button) and counter-clockwise (:arrows_counterclockwise:)):
       ![Rotated reference image](readmeImages/Rotation.PNG "Rotated reference image")
@@ -56,6 +56,13 @@ Discord bot that let artists retrieve reference images in discord from https://q
       ![Blured reference image](readmeImages/Blur.PNG "Blur reference image")
     - Negate (:unamused: button):
       ![Negated reference image](readmeImages/Negate.PNG "Negated reference image")
+
+
+  - Upcoming features:
+    - Reference retrieval via Google image search
+    - Reference retrieval via DeviantArt
+    - AI generated references
+    - Webfrontend
 
 
 > &copy; 2023 Florian Pfützenreuter
