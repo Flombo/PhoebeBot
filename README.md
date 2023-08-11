@@ -57,8 +57,16 @@ Discord bot that let artists retrieve reference images in discord from https://q
     - Negate (:unamused: button):
       ![Negated reference image](readmeImages/Negate.PNG "Negated reference image")
 
+- Available commands:
+  - Quickpose commands:
+    - /urban => retrieves urban references like skylines
+    - /landscapes => retrieves landscape references
+    - /face gender(female/male/all) => retrieves face references 
+    - /hands gender(female/male/all) => retrieves hand references
+    - /animals => retrieves animal references
+    - /pose gender(female/male/all) clothing(all/nude & partially nude/clothes & costumes)
 
-  - Upcoming features:
+- Upcoming features:
     - Reference retrieval via Google image search
     - Reference retrieval via DeviantArt
     - AI generated references
