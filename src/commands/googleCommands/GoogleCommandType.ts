@@ -1,0 +1,3 @@
+export enum GoogleCommandType {
+    googleimagesearch
+}

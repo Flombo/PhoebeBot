@@ -7,7 +7,7 @@
       "description": "The gender of the reference person",
       "type": 3,
       "required": true,
-      "choices" : [
+      "choices": [
         {
           "name": "female",
           "value": "female"

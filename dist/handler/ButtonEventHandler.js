@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ButtonEventHandler = void 0;
 const DefaultCommand_1 = require("../commands/poseCommands/DefaultCommand");
 const ReferenceButtonIds_1 = require("../referenceButtons/ReferenceButtonIds");
-const QuickPoseReference_1 = require("../referenceRetrieval/QuickPoseReference");
+const Reference_1 = require("../referenceRetrieval/Reference");
 class ButtonEventHandler {
     referenceButtonsFiles;
     constructor(referenceButtonsFiles) {
@@ -16,7 +16,7 @@ class ButtonEventHandler {
             await interaction.reply({ content: 'There was an error while executing this interaction!', ephemeral: true });
         }
         const embed = embeds.length === 1 ? embeds[0] : embeds[1];
-        const reference = new QuickPoseReference_1.QuickPoseReference();
+        const reference = new Reference_1.Reference();
         reference.url = embed.fields[0].value;
         reference.owner = embed.fields[2].value;
         reference.height = +embed.fields[3].value;

@@ -1,6 +1,6 @@
-import { CacheType, ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
-import { Choice } from "./Choice";
+import { CacheType, ChatInputCommandInteraction, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
 import { CommandOptionChoice } from "./CommandOptionChoice";
+import { IChoice } from "./IChoice";
 import { ICommand } from "./ICommand";
 
 export abstract class SlashCommand implements ICommand {
@@ -33,15 +33,40 @@ export abstract class SlashCommand implements ICommand {
 
         this.options.forEach(option => {
 
-            let stringOption = new SlashCommandStringOption();
-            stringOption.setRequired(option.required);
-            stringOption.setName(option.name);
-            stringOption.setDescription(option.description);
-            option.choices.forEach(choiceOption => {
-                stringOption.addChoices(choiceOption)
-            });
+            const type: number = option.type;
+            let slashCommandOption: any;
 
-            this._data.addStringOption(stringOption);
+            switch (type) {
+                case 3:
+                    slashCommandOption = new SlashCommandStringOption();
+                    slashCommandOption.setRequired(option.required);
+                    slashCommandOption.setName(option.name);
+                    slashCommandOption.setDescription(option.description);
+
+                    if (option.choices !== undefined) {
+                        option.choices.forEach((choiceOption: IChoice) => {
+                            slashCommandOption.addChoices(choiceOption)
+                        });
+                    }
+                    this._data.addStringOption(slashCommandOption);
+                    break;
+                case 5:
+                    slashCommandOption = new SlashCommandBooleanOption();
+                    slashCommandOption.setRequired(option.required);
+                    slashCommandOption.setName(option.name);
+                    slashCommandOption.setDescription(option.description);
+                    this._data.addBooleanOption(slashCommandOption);
+                    break;
+                case 4:
+                    slashCommandOption = new SlashCommandIntegerOption();
+                    slashCommandOption.setRequired(option.required);
+                    slashCommandOption.setName(option.name);
+                    slashCommandOption.setDescription(option.description);
+                    slashCommandOption.setMinValue(option.min);
+                    slashCommandOption.setMaxValue(option.max);
+                    this._data.addIntegerOption(slashCommandOption);
+                    break;
+            }
         });
     }
 
@@ -73,10 +98,10 @@ export abstract class SlashCommand implements ICommand {
         this._options = value;
     }
 
-    getSelectedChoices(): Array<Choice> {
-        let selectedChoices: Array<Choice> = new Array();
+    getSelectedChoices(): Array<IChoice> {
+        let selectedChoices: Array<IChoice> = new Array();
         this.options.forEach((option: CommandOptionChoice) => {
-            selectedChoices.push(...(option.choices.filter((choice: Choice) => choice.selected)));
+            selectedChoices.push(...(option.choices.filter((choice: IChoice) => choice.selected)));
         });
         return selectedChoices;
     }

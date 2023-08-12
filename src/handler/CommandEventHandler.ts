@@ -41,11 +41,9 @@ export class CommandEventHandler implements IDiscordEventHandler {
         const choosenOptions = interaction.options.data;
         command.options.forEach(option => {
             choosenOptions.forEach(choosenOption => {
-                option.choices.forEach(choice => {
-                    if (choice.value === choosenOption.value) {
-                        choice.selected = true;
-                    }
-                })
+                if (option.name === choosenOption.name) {
+                    option.value = choosenOption.value;
+                }
             });
         });
     }

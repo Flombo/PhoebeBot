@@ -1,9 +1,11 @@
-export class Choice {
-    private _name: string;
-    private _value: string;
-    private _selected : boolean;
+import { IChoice } from "./IChoice";
 
-    constructor(name : string, value : string) {
+export class NumberChoice implements IChoice {
+    private _name: string;
+    private _value: number;
+    private _selected: boolean;
+
+    constructor(name: string, value: number) {
         this._name = name;
         this._value = value;
         this._selected = false;
@@ -17,14 +19,14 @@ export class Choice {
         this._name = value;
     }
 
-    public get value(): string {
+    public get value(): number {
         return this._value;
     }
 
-    public set value(value: string) {
+    public set value(value: number) {
         this._value = value;
     }
-    
+
     public get selected(): boolean {
         return this._selected;
     }
@@ -32,5 +34,4 @@ export class Choice {
     public set selected(value: boolean) {
         this._selected = value;
     }
-
 }

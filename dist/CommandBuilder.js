@@ -4,6 +4,8 @@ exports.CommandBuilder = void 0;
 const tslib_1 = require("tslib");
 const path_1 = tslib_1.__importDefault(require("path"));
 const ComponentFilesHelper_1 = require("./ComponentFilesHelper");
+const GoogleCommandType_1 = require("./commands/googleCommands/GoogleCommandType");
+const GoogleImageSearchCommand_1 = require("./commands/googleCommands/GoogleImageSearchCommand");
 const AnimalCommand_1 = require("./commands/poseCommands/AnimalCommand");
 const DefaultCommand_1 = require("./commands/poseCommands/DefaultCommand");
 const FaceCommand_1 = require("./commands/poseCommands/FaceCommand");
@@ -52,6 +54,11 @@ class CommandBuilder {
                         const landscapeCommand = new LandscapeCommand_1.LandscapeCommand(command.name, command.description, command.options, referenceButtonsFiles);
                         landscapeCommand.initSlashCommand();
                         this._commands.set(command.name, landscapeCommand);
+                        break;
+                    case GoogleCommandType_1.GoogleCommandType[GoogleCommandType_1.GoogleCommandType.googleimagesearch]:
+                        const googleImageSearch = new GoogleImageSearchCommand_1.GoogleImageSearchCommand(command.name, command.description, command.options, referenceButtonsFiles);
+                        googleImageSearch.initSlashCommand();
+                        this._commands.set(command.name, googleImageSearch);
                         break;
                 }
             });

@@ -1,6 +1,8 @@
 import path from "path";
 import { ComponentFilesHelper } from './ComponentFilesHelper';
 import { IReferenceCommand } from "./commands/IReferenceCommand";
+import { GoogleCommandType } from "./commands/googleCommands/GoogleCommandType";
+import { GoogleImageSearchCommand } from "./commands/googleCommands/GoogleImageSearchCommand";
 import { AnimalCommand } from "./commands/poseCommands/AnimalCommand";
 import { DefaultCommand } from "./commands/poseCommands/DefaultCommand";
 import { FaceCommand } from "./commands/poseCommands/FaceCommand";
@@ -58,6 +60,11 @@ export class CommandBuilder {
                         const landscapeCommand: LandscapeCommand = new LandscapeCommand(command.name, command.description, command.options, referenceButtonsFiles);
                         landscapeCommand.initSlashCommand();
                         this._commands.set(command.name, landscapeCommand);
+                        break;
+                    case GoogleCommandType[GoogleCommandType.googleimagesearch]:
+                        const googleImageSearch: GoogleImageSearchCommand = new GoogleImageSearchCommand(command.name, command.description, command.options, referenceButtonsFiles);
+                        googleImageSearch.initSlashCommand();
+                        this._commands.set(command.name, googleImageSearch);
                         break;
                 }
 

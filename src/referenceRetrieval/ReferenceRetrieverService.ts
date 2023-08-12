@@ -7,7 +7,7 @@ export abstract class ReferenceRetrieverService implements IReferenceRetrieverSe
 
     private angle: number = 270;
 
-    getReference(command: IReferenceCommand): Promise<IReference> {
+    getReference(command: IReferenceCommand): Promise<Array<IReference>> {
         throw new Error("Method not implemented. Used command: " + command);
     }
 

@@ -2,7 +2,7 @@ import { ButtonInteraction, CacheType, Embed } from "discord.js";
 import { DefaultCommand } from "../commands/poseCommands/DefaultCommand";
 import { ReferenceButtonIds } from "../referenceButtons/ReferenceButtonIds";
 import { IReference } from "../referenceRetrieval/IReference";
-import { QuickPoseReference } from "../referenceRetrieval/QuickPoseReference";
+import { Reference } from "../referenceRetrieval/Reference";
 import { IDiscordEventHandler } from "./IDiscordEventHandler";
 
 export class ButtonEventHandler implements IDiscordEventHandler {
@@ -24,7 +24,7 @@ export class ButtonEventHandler implements IDiscordEventHandler {
 
         const embed: Embed = embeds.length === 1 ? embeds[0] : embeds[1];
 
-        const reference: IReference = new QuickPoseReference();
+        const reference: IReference = new Reference();
         reference.url = embed.fields[0].value;
         reference.owner = embed.fields[2].value;
         reference.height = +embed.fields[3].value;

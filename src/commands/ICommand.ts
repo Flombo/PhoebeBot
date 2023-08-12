@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { Choice } from "./Choice";
 import { CommandOptionChoice } from "./CommandOptionChoice";
+import { IChoice } from "./IChoice";
 
 export interface ICommand {
 
@@ -22,6 +22,6 @@ export interface ICommand {
 
     get data(): SlashCommandBuilder;
 
-    getSelectedChoices(): Array<Choice>;
+    getSelectedChoices(): Array<IChoice>;
 
 }

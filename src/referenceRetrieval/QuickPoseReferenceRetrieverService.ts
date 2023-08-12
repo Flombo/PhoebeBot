@@ -1,9 +1,8 @@
-import puppeteer, { Browser, Page } from "puppeteer";
-import { Choice } from "../commands/Choice";
+import puppeteer, { Browser, BrowserContext, Page } from "puppeteer";
 import { CommandOptionChoice } from "../commands/CommandOptionChoice";
 import { IReferenceCommand } from "../commands/IReferenceCommand";
 import { IReference } from "./IReference";
-import { QuickPoseReference } from "./QuickPoseReference";
+import { Reference } from "./Reference";
 import { ReferenceRetrieverService } from "./ReferenceRetrieverService";
 
 export class QuickPoseReferenceRetrieverService extends ReferenceRetrieverService {
@@ -19,7 +18,7 @@ export class QuickPoseReferenceRetrieverService extends ReferenceRetrieverServic
         this.alreadyInstantiatedBrowser = false;
     }
 
-    public async getReference(command: IReferenceCommand): Promise<IReference> {
+    public async getReference(command: IReferenceCommand): Promise<Array<IReference>> {
 
         if (!this.alreadyInstantiatedBrowser || this.page.isClosed()) {
             this.browser = await puppeteer.launch({
@@ -28,11 +27,11 @@ export class QuickPoseReferenceRetrieverService extends ReferenceRetrieverServic
                     "--disable-gpu",
                     "--disable-dev-shm-usage",
                     "--disable-setuid-sandbox",
-                    "--no-sandbox",
+                    "--no-sandbox"
                 ]
             });
-
-            this.page = await this.browser.newPage();
+            const context: BrowserContext = await this.browser.createIncognitoBrowserContext();
+            this.page = await context.newPage();
             this.alreadyInstantiatedBrowser = true;
         }
 
@@ -44,7 +43,10 @@ export class QuickPoseReferenceRetrieverService extends ReferenceRetrieverServic
         const reference: IReference = await this.retrieveReferenceUrl(this.page);
         reference.owner = await this.retrieveReferenceOwner(this.page);
 
-        return reference;
+        const references: Array<IReference> = new Array();
+        references.push(reference);
+
+        return references;
     }
 
     /**
@@ -55,24 +57,20 @@ export class QuickPoseReferenceRetrieverService extends ReferenceRetrieverServic
      */
     private async makeReferenceSelection(page: Page, command: IReferenceCommand): Promise<void> {
         await page.evaluate((commandType: string, options: Array<CommandOptionChoice>) => {
-            const typeInput: HTMLInputElement | null = document.querySelector(`input[name="type"][data-value="${commandType}`);
+            const typeInput: HTMLInputElement | null = document.querySelector(`input[name="type"][data-value="${commandType}"]`);
 
             if (typeInput !== null) {
                 typeInput.click();
             }
 
             options.forEach((option: CommandOptionChoice) => {
-                option.choices.forEach((choice: Choice) => {
-                    if (choice.selected) {
-                        const items: NodeListOf<HTMLInputElement> = document.querySelectorAll(`input[name="${option.name}"][data-value="${choice.value}"]`);
-                        if (items === undefined) {
-                            return;
-                        }
+                const items: NodeListOf<HTMLInputElement> = document.querySelectorAll(`input[name="${option.name}"][data-value="${option.value}"]`);
+                if (items === undefined) {
+                    return;
+                }
 
-                        items.forEach((item: HTMLInputElement) => {
-                            item.click();
-                        });
-                    }
+                items.forEach((item: HTMLInputElement) => {
+                    item.click();
                 });
             });
 
@@ -81,6 +79,8 @@ export class QuickPoseReferenceRetrieverService extends ReferenceRetrieverServic
             if (startButton !== null) {
                 startButton.click();
             }
+
+            return;
 
         }, command.name, command.options);
     }
@@ -118,7 +118,7 @@ export class QuickPoseReferenceRetrieverService extends ReferenceRetrieverServic
             });
         });
 
-        const reference: IReference = Object.assign(new QuickPoseReference(), JSON.parse(imageData));
+        const reference: IReference = Object.assign(new Reference(), JSON.parse(imageData));
 
         return reference;
     }

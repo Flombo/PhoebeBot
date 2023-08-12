@@ -20,14 +20,38 @@ class SlashCommand {
         this._data.setName(this.name)
             .setDescription(this.description);
         this.options.forEach(option => {
-            let stringOption = new discord_js_1.SlashCommandStringOption();
-            stringOption.setRequired(option.required);
-            stringOption.setName(option.name);
-            stringOption.setDescription(option.description);
-            option.choices.forEach(choiceOption => {
-                stringOption.addChoices(choiceOption);
-            });
-            this._data.addStringOption(stringOption);
+            const type = option.type;
+            let slashCommandOption;
+            switch (type) {
+                case 3:
+                    slashCommandOption = new discord_js_1.SlashCommandStringOption();
+                    slashCommandOption.setRequired(option.required);
+                    slashCommandOption.setName(option.name);
+                    slashCommandOption.setDescription(option.description);
+                    if (option.choices !== undefined) {
+                        option.choices.forEach((choiceOption) => {
+                            slashCommandOption.addChoices(choiceOption);
+                        });
+                    }
+                    this._data.addStringOption(slashCommandOption);
+                    break;
+                case 5:
+                    slashCommandOption = new discord_js_1.SlashCommandBooleanOption();
+                    slashCommandOption.setRequired(option.required);
+                    slashCommandOption.setName(option.name);
+                    slashCommandOption.setDescription(option.description);
+                    this._data.addBooleanOption(slashCommandOption);
+                    break;
+                case 4:
+                    slashCommandOption = new discord_js_1.SlashCommandIntegerOption();
+                    slashCommandOption.setRequired(option.required);
+                    slashCommandOption.setName(option.name);
+                    slashCommandOption.setDescription(option.description);
+                    slashCommandOption.setMinValue(option.min);
+                    slashCommandOption.setMaxValue(option.max);
+                    this._data.addIntegerOption(slashCommandOption);
+                    break;
+            }
         });
     }
     get data() {

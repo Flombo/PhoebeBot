@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuickPoseReferenceRetrieverService = void 0;
 const tslib_1 = require("tslib");
 const puppeteer_1 = tslib_1.__importStar(require("puppeteer"));
-const QuickPoseReference_1 = require("./QuickPoseReference");
+const Reference_1 = require("./Reference");
 const ReferenceRetrieverService_1 = require("./ReferenceRetrieverService");
 class QuickPoseReferenceRetrieverService extends ReferenceRetrieverService_1.ReferenceRetrieverService {
     browser;
@@ -23,10 +23,11 @@ class QuickPoseReferenceRetrieverService extends ReferenceRetrieverService_1.Ref
                     "--disable-gpu",
                     "--disable-dev-shm-usage",
                     "--disable-setuid-sandbox",
-                    "--no-sandbox",
+                    "--no-sandbox"
                 ]
             });
-            this.page = await this.browser.newPage();
+            const context = await this.browser.createIncognitoBrowserContext();
+            this.page = await context.newPage();
             this.alreadyInstantiatedBrowser = true;
         }
         await this.page.goto('https://quickposes.com/en/gestures/random');
@@ -34,31 +35,30 @@ class QuickPoseReferenceRetrieverService extends ReferenceRetrieverService_1.Ref
         await this.page.waitForNetworkIdle();
         const reference = await this.retrieveReferenceUrl(this.page);
         reference.owner = await this.retrieveReferenceOwner(this.page);
-        return reference;
+        const references = new Array();
+        references.push(reference);
+        return references;
     }
     async makeReferenceSelection(page, command) {
         await page.evaluate((commandType, options) => {
-            const typeInput = document.querySelector(`input[name="type"][data-value="${commandType}`);
+            const typeInput = document.querySelector(`input[name="type"][data-value="${commandType}"]`);
             if (typeInput !== null) {
                 typeInput.click();
             }
             options.forEach((option) => {
-                option.choices.forEach((choice) => {
-                    if (choice.selected) {
-                        const items = document.querySelectorAll(`input[name="${option.name}"][data-value="${choice.value}"]`);
-                        if (items === undefined) {
-                            return;
-                        }
-                        items.forEach((item) => {
-                            item.click();
-                        });
-                    }
+                const items = document.querySelectorAll(`input[name="${option.name}"][data-value="${option.value}"]`);
+                if (items === undefined) {
+                    return;
+                }
+                items.forEach((item) => {
+                    item.click();
                 });
             });
             const startButton = document.querySelector('div[role="button"]');
             if (startButton !== null) {
                 startButton.click();
             }
+            return;
         }, command.name, command.options);
     }
     async retrieveReferenceOwner(page) {
@@ -88,7 +88,7 @@ class QuickPoseReferenceRetrieverService extends ReferenceRetrieverService_1.Ref
                 resolve(JSON.stringify(imageData));
             });
         });
-        const reference = Object.assign(new QuickPoseReference_1.QuickPoseReference(), JSON.parse(imageData));
+        const reference = Object.assign(new Reference_1.Reference(), JSON.parse(imageData));
         return reference;
     }
 }

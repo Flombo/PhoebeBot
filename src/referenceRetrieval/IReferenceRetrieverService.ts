@@ -3,7 +3,7 @@ import { IReference } from "./IReference";
 
 export interface IReferenceRetrieverService {
 
-    getReference(command: IReferenceCommand): Promise<IReference>;
+    getReference(command: IReferenceCommand): Promise<Array<IReference>>;
 
     mirrorHorizontal(reference: IReference): Promise<IReference>;
 
