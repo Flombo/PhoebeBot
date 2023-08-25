@@ -1,7 +1,6 @@
 FROM node:latest
-WORKDIR /artbot
-ARG bottoken
-ENV bottoken_env=$bottoken
+WORKDIR /phoebebot
+RUN chmod 755 /phoebebot
 RUN apt-get -y update
 RUN apt-get -y upgrade
 # need to install the missing chrome dependencies for using puppeteer
@@ -38,10 +37,10 @@ RUN apt-get install -y \
     libxss1 \
     libxtst6 \
     xdg-utils
+    
 COPY package*.json ./
 COPY dist ./dist
 COPY .env ./
-RUN ls -la ./*
 RUN npm install -g npm@latest
-RUN npm ci
+RUN npm install
 RUN npm run start

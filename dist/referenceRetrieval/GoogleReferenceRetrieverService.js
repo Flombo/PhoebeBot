@@ -2,8 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GoogleReferenceRetrieverService = void 0;
 const tslib_1 = require("tslib");
-const puppeteer_1 = tslib_1.__importStar(require("puppeteer"));
+const puppeteer_1 = require("puppeteer");
 const ReferenceRetrieverService_1 = require("./ReferenceRetrieverService");
+const puppeteer_extra_1 = tslib_1.__importDefault(require("puppeteer-extra"));
+const puppeteer_extra_plugin_stealth_1 = tslib_1.__importDefault(require("puppeteer-extra-plugin-stealth"));
 class GoogleReferenceRetrieverService extends ReferenceRetrieverService_1.ReferenceRetrieverService {
     browser;
     page;
@@ -16,8 +18,11 @@ class GoogleReferenceRetrieverService extends ReferenceRetrieverService_1.Refere
     }
     async getReference(command) {
         if (!this.alreadyInstantiatedBrowser || this.page.isClosed()) {
-            this.browser = await puppeteer_1.default.launch({
-                headless: "new",
+            const puppeteer = puppeteer_extra_1.default;
+            const stealthPlugin = (0, puppeteer_extra_plugin_stealth_1.default)();
+            puppeteer.use(stealthPlugin);
+            this.browser = await puppeteer.launch({
+                headless: false,
                 timeout: 30 * 1000,
                 args: [
                     "--disable-gpu",
@@ -28,6 +33,7 @@ class GoogleReferenceRetrieverService extends ReferenceRetrieverService_1.Refere
             });
             const context = await this.browser.createIncognitoBrowserContext();
             this.page = await context.newPage();
+            this.page.setBypassCSP(true);
             this.alreadyInstantiatedBrowser = true;
         }
         await this.page.goto('https://www.google.de/imghp?hl=de&ogbl');
@@ -37,6 +43,7 @@ class GoogleReferenceRetrieverService extends ReferenceRetrieverService_1.Refere
         const orderOption = command.options.find(option => option.name === "order");
         const amount = referenceAmountOption ? referenceAmountOption.value : 1;
         const order = orderOption ? orderOption.value : 'rnd';
+        console.log(order, amount);
         const references = await this.retrieveReferenceUrl(this.page, amount, order);
         return references;
     }
@@ -80,69 +87,32 @@ class GoogleReferenceRetrieverService extends ReferenceRetrieverService_1.Refere
         }, command.options);
     }
     async retrieveReferenceUrl(page, referenceAmount, order) {
-        console.log('reference url');
         const referencesJSON = await page.evaluate(async () => {
             const imageReferences = new Array();
             const imageContainers = document.querySelectorAll('div[class="isv-r PNCib MSM1fd BUooTd"]');
             const imageContainerLength = imageContainers.length - 1;
-            switch (order) {
-                case 'asc':
-                    for (let i = imageContainerLength; i > imageContainerLength - referenceAmount; i--) {
-                        const imageContainer = imageContainers[i];
-                        const ownerDiv = imageContainer.querySelector('div[class= "LAA3yd"]');
-                        const image = imageContainer.querySelector('img[class="rg_i Q4LuWd"]');
-                        if (image === null) {
-                            throw new Error('Image not found!');
-                        }
-                        const imageData = {
-                            url: image.src,
-                            width: image.naturalWidth,
-                            height: image.naturalHeight,
-                            owner: ownerDiv ? ownerDiv.textContent : '',
-                            imageData: ''
-                        };
-                        imageReferences.push(imageData);
-                    }
-                    break;
-                case 'desc':
-                    for (let i = 0; i > 0 + referenceAmount; i++) {
-                        const imageContainer = imageContainers[i];
-                        const ownerDiv = imageContainer.querySelector('div[class= "LAA3yd"]');
-                        const image = imageContainer.querySelector('img[class="rg_i Q4LuWd"]');
-                        if (image === null) {
-                            throw new Error('Image not found!');
-                        }
-                        const imageData = {
-                            url: image.src,
-                            width: image.naturalWidth,
-                            height: image.naturalHeight,
-                            owner: ownerDiv ? ownerDiv.textContent : '',
-                            imageData: ''
-                        };
-                        imageReferences.push(imageData);
-                    }
-                    break;
-                case 'rnd':
-                    let i = 0;
-                    while (i < referenceAmount) {
-                        const imageContainer = imageContainers[Math.floor(Math.random() * (imageContainerLength))];
-                        const ownerDiv = imageContainer.querySelector('div[class= "LAA3yd"]');
-                        const image = imageContainer.querySelector('img[class="rg_i Q4LuWd"]');
-                        if (image === null) {
-                            throw new Error('Image not found!');
-                        }
-                        const imageData = {
-                            url: image.src,
-                            width: image.naturalWidth,
-                            height: image.naturalHeight,
-                            owner: ownerDiv ? ownerDiv.textContent : '',
-                            imageData: ''
-                        };
-                        imageReferences.push(imageData);
-                        i++;
-                    }
-                    break;
+            console.log(imageContainerLength, imageContainers);
+            for (let i = imageContainerLength; i > imageContainerLength - 1; i--) {
+                const imageContainer = imageContainers[i];
+                const ownerDivContainer = imageContainer.querySelector('div[class="mEQved Yx2mie GdCiyb"]');
+                const ownerDiv = ownerDivContainer?.querySelector('div[class= "LAA3yd"]');
+                const image = imageContainer.querySelector('img[class="rg_i Q4LuWd"]');
+                console.log(ownerDivContainer, ownerDiv, image);
+                if (image === null) {
+                    return await new Promise((reject) => {
+                        reject("No image found!");
+                    });
+                }
+                const imageData = {
+                    url: image.src !== undefined && image.src.length > 0 ? image.src : image.getAttribute('data-src'),
+                    width: image.naturalWidth,
+                    height: image.naturalHeight,
+                    owner: ownerDiv ? ownerDiv.textContent : '',
+                    imageData: ''
+                };
+                imageReferences.push(imageData);
             }
+            console.log(imageReferences);
             return await new Promise(resolve => {
                 resolve(JSON.stringify(imageReferences));
             });

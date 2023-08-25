@@ -1,8 +1,10 @@
-import puppeteer, { Browser, BrowserContext, Page } from "puppeteer";
+import { Browser, BrowserContext, Page } from "puppeteer";
 import { CommandOptionChoice } from "../commands/CommandOptionChoice";
 import { IReferenceCommand } from "../commands/IReferenceCommand";
 import { IReference } from "./IReference";
 import { ReferenceRetrieverService } from "./ReferenceRetrieverService";
+import PuppeteerExtra from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
 export class GoogleReferenceRetrieverService extends ReferenceRetrieverService {
 
@@ -20,8 +22,11 @@ export class GoogleReferenceRetrieverService extends ReferenceRetrieverService {
     public async getReference(command: IReferenceCommand): Promise<Array<IReference>> {
 
         if (!this.alreadyInstantiatedBrowser || this.page.isClosed()) {
+            const puppeteer = PuppeteerExtra;
+            const stealthPlugin : any = StealthPlugin();
+            puppeteer.use(stealthPlugin);
             this.browser = await puppeteer.launch({
-                headless: "new",
+                headless: false,
                 timeout: 30 * 1000,
                 args: [
                     "--disable-gpu",
@@ -32,6 +37,7 @@ export class GoogleReferenceRetrieverService extends ReferenceRetrieverService {
             });
             const context: BrowserContext = await this.browser.createIncognitoBrowserContext();
             this.page = await context.newPage();
+            this.page.setBypassCSP(true);
             this.alreadyInstantiatedBrowser = true;
         }
 
@@ -45,6 +51,8 @@ export class GoogleReferenceRetrieverService extends ReferenceRetrieverService {
 
         const amount: number = referenceAmountOption ? referenceAmountOption.value as number : 1;
         const order: string = orderOption ? orderOption.value as string : 'rnd';
+
+        console.log(order, amount)
 
         const references: Array<IReference> = await this.retrieveReferenceUrl(this.page, amount, order);
 
@@ -112,80 +120,37 @@ export class GoogleReferenceRetrieverService extends ReferenceRetrieverService {
     }
 
     private async retrieveReferenceUrl(page: Page, referenceAmount: number, order: string): Promise<Array<IReference>> {
-
-        console.log('reference url')
         const referencesJSON: string = await page.evaluate(async (): Promise<string> => {
             const imageReferences: Array<Object> = new Array();
             const imageContainers: NodeListOf<HTMLDivElement> = document.querySelectorAll('div[class="isv-r PNCib MSM1fd BUooTd"]');
             const imageContainerLength: number = imageContainers.length - 1;
+            console.log(imageContainerLength, imageContainers)
+            
+            for (let i: number = imageContainerLength; i > imageContainerLength - 1; i--) {
+                const imageContainer: HTMLDivElement = imageContainers[i];
+                const ownerDivContainer: HTMLDivElement | null = imageContainer.querySelector('div[class="mEQved Yx2mie GdCiyb"]');
+                const ownerDiv: HTMLDivElement | null | undefined = ownerDivContainer?.querySelector('div[class= "LAA3yd"]');
+                const image: HTMLImageElement | null = imageContainer.querySelector('img[class="rg_i Q4LuWd"]');
 
-            switch (order) {
-                case 'asc':
-                    for (let i: number = imageContainerLength; i > imageContainerLength - referenceAmount; i--) {
-                        const imageContainer: HTMLDivElement = imageContainers[i];
-                        const ownerDiv: HTMLDivElement | null = imageContainer.querySelector('div[class= "LAA3yd"]');
-                        const image: HTMLImageElement | null = imageContainer.querySelector('img[class="rg_i Q4LuWd"]');
+                console.log(ownerDivContainer, ownerDiv, image)
+                if(image === null) {
+                    return await new Promise((reject) => {
+                        reject("No image found!");
+                    });
+                }
 
-                        if (image === null) {
-                            throw new Error('Image not found!');
-                        }
+                const imageData: Object = {
+                    url: image.src !== undefined && image.src.length > 0 ? image.src : image.getAttribute('data-src'),
+                    width: image.naturalWidth,
+                    height: image.naturalHeight,
+                    owner: ownerDiv ? ownerDiv.textContent : '',
+                    imageData: ''
+                }
 
-                        const imageData: Object = {
-                            url: image.src,
-                            width: image.naturalWidth,
-                            height: image.naturalHeight,
-                            owner: ownerDiv ? ownerDiv.textContent : '',
-                            imageData: ''
-                        }
-
-                        imageReferences.push(imageData);
-                    }
-                    break;
-                case 'desc':
-                    for (let i: number = 0; i > 0 + referenceAmount; i++) {
-                        const imageContainer: HTMLDivElement = imageContainers[i];
-                        const ownerDiv: HTMLDivElement | null = imageContainer.querySelector('div[class= "LAA3yd"]');
-                        const image: HTMLImageElement | null = imageContainer.querySelector('img[class="rg_i Q4LuWd"]');
-
-                        if (image === null) {
-                            throw new Error('Image not found!');
-                        }
-
-                        const imageData: Object = {
-                            url: image.src,
-                            width: image.naturalWidth,
-                            height: image.naturalHeight,
-                            owner: ownerDiv ? ownerDiv.textContent : '',
-                            imageData: ''
-                        }
-
-                        imageReferences.push(imageData);
-                    }
-                    break;
-                case 'rnd':
-                    let i: number = 0;
-                    while (i < referenceAmount) {
-                        const imageContainer: HTMLDivElement = imageContainers[Math.floor(Math.random() * (imageContainerLength))];
-                        const ownerDiv: HTMLDivElement | null = imageContainer.querySelector('div[class= "LAA3yd"]');
-                        const image: HTMLImageElement | null = imageContainer.querySelector('img[class="rg_i Q4LuWd"]');
-
-                        if (image === null) {
-                            throw new Error('Image not found!');
-                        }
-
-                        const imageData: Object = {
-                            url: image.src,
-                            width: image.naturalWidth,
-                            height: image.naturalHeight,
-                            owner: ownerDiv ? ownerDiv.textContent : '',
-                            imageData: ''
-                        }
-
-                        imageReferences.push(imageData);
-                        i++;
-                    }
-                    break;
+                imageReferences.push(imageData);
             }
+
+            console.log(imageReferences)
 
             return await new Promise(resolve => {
                 resolve(JSON.stringify(imageReferences));
