@@ -1,20 +1,34 @@
 {
   "name": "phoebe-bot",
   "version": "1.0.0",
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    }
+  },
+  "eslintIgnore": [
+    "./dist",
+    "./node_modules"
+  ],
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "node ./dist/bot.js",
-    "dev": "nodemon ./dist/bot.js"
+    "startBot": "node ./dist/bot.js",
+    "devBot": "nodemon ./dist/bot.js",
+    "startBotServer": "node ./dist/botServer.js",
+    "devBotServer": "node ./dist/botServer.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "puppeteer": "^19.4.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
@@ -27,6 +41,6 @@
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "eslint": "^8.46.0",
     "nodemon": "^3.0.1",
-    "typescript": "^4.9.4"
+    "typescript": "5.1"
   }
 }

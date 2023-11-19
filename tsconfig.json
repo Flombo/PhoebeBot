@@ -106,7 +106,6 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
-    "sourceMap": true,
     "typeRoots": [
       "./node_modules/@types"
     ]

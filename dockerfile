@@ -37,10 +37,11 @@ RUN apt-get install -y \
     libxss1 \
     libxtst6 \
     xdg-utils
-    
+
 COPY package*.json ./
 COPY dist ./dist
 COPY .env ./
 RUN npm install -g npm@latest
 RUN npm install
-RUN npm run start
+RUN npm run startBot
+RUN npm run startBotServer
