@@ -12,6 +12,8 @@ Discord bot that let artists retrieve reference images in discord from https://q
     - Add an .env file to the root of the project with the attributes:
         - BOTTOKEN='your token'
         - CLIENT_ID='your clientId'
+        - If you want to use the bot backend:
+          - PORT='the port for the bot backend'
   - Install all dependencies by your own:
   - Install Node.js
   - Run:
