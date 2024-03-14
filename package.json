@@ -40,7 +40,7 @@
     "@types/node": "^20.11.25",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "eslint": "^8.57.0",
-    "nodemon": "^3.0.2",
+    "nodemon": "^3.1.0",
     "typescript": "^5.4.2"
   }
 }
